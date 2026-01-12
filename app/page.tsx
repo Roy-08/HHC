@@ -96,42 +96,28 @@ export default function Page() {
             </div>
           </div>
 
-          {/* Description - Updated Content */}
+          {/* Description - Above Language Selection */}
           <div className="space-y-3 text-gray-700 text-sm sm:text-base leading-relaxed mb-8 max-w-2xl mx-auto">
             <p className="text-center">
-              This <span className="font-semibold text-pink-600">Happiness Index</span> helps you pause and check in with your emotional well-being.
-            </p>
-            <p className="text-center">
-              There are <span className="font-semibold">no right or wrong answers</span>, only your honest feelings.
+              This <span className="font-semibold text-pink-600">Happiness Index</span> helps you pause and check in with your emotional well-being. There are <span className="font-semibold">no right or wrong answers</span>, only your honest feelings.
             </p>
             <p className="text-center">
               The test is available in <span className="font-semibold text-red-600">15 languages</span>, so choose the one you&apos;re most comfortable with.
-            </p>
-            <p className="text-center text-xs sm:text-sm italic text-gray-600 mt-4 pt-3 border-t border-gray-200">
-              English is the primary language of communication. In case of any difference in translated text, please refer to the English version only.
-            </p>
-            <p className="text-center text-xs sm:text-sm italic text-gray-600">
-              All reports would be generated in English language only.
             </p>
             <p className="text-center font-medium text-pink-600 mt-4">
               A few minutes today can bring clarity, awareness, and a happier you.
             </p>
             <p className="text-center text-sm font-semibold text-gray-800 mt-2">
-              Small step, big insight. Let&apos;s start.
+              Small step, big insight. Let&apos;s begin.
             </p>
           </div>
 
           {/* Language Selection */}
-          <div className="mb-8">
-            <label className="text-lg sm:text-xl font-semibold text-gray-800 block text-center mb-4 flex items-center justify-center gap-2">
-              <Globe className="w-5 h-5 text-pink-500" />
-              Choose Your Language
-            </label>
-            
+          <div className="mb-6">
             <div ref={dropdownRef} className="relative w-full max-w-sm mx-auto">
-              {/* Dropdown Menu - Smaller and More Attractive */}
+              {/* Dropdown Menu - Square/Rectangular Options */}
               <div
-                className={`absolute bottom-full left-0 right-0 mb-2 bg-white rounded-2xl shadow-2xl overflow-hidden transition-all duration-500 ease-out border-2 border-pink-200 ${
+                className={`absolute bottom-full left-0 right-0 mb-2 bg-white rounded-2xl overflow-hidden transition-all duration-500 ease-out border-2 border-pink-200 shadow-2xl ${
                   isOpen ? 'opacity-100 translate-y-0 scale-100 pointer-events-auto' : 'opacity-0 translate-y-4 scale-95 pointer-events-none'
                 }`}
                 style={{ maxHeight: isOpen ? '240px' : '0' }}
@@ -141,9 +127,9 @@ export default function Page() {
                     <button
                       key={language.code}
                       onClick={() => handleSelect(language)}
-                      className={`w-full px-4 py-2 text-left transition-all duration-300 rounded-xl mb-1 transform hover:scale-[1.03] relative overflow-hidden group ${
+                      className={`w-full px-4 py-2 text-left transition-all duration-300 rounded-lg mb-1 transform hover:scale-[1.02] relative overflow-hidden group ${
                         selectedLanguage.code === language.code 
-                          ? 'bg-gradient-to-r from-pink-500 via-pink-600 to-red-500 text-white shadow-lg scale-[1.03]' 
+                          ? 'bg-gradient-to-r from-pink-500 via-pink-600 to-red-500 text-white shadow-lg scale-[1.02]' 
                           : 'hover:bg-gradient-to-r hover:from-pink-50 hover:via-pink-100 hover:to-red-50 text-gray-800'
                       }`}
                       style={{
@@ -167,16 +153,16 @@ export default function Page() {
                 </div>
               </div>
 
-              {/* Trigger Button - Smaller and More Attractive */}
+              {/* Trigger Button - Rounded Full (Cylinder Shape) */}
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="w-full px-5 py-3 bg-gradient-to-r from-pink-100 via-pink-50 to-red-100 hover:from-pink-200 hover:via-pink-100 hover:to-red-200 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-between group border-2 border-pink-200 hover:border-pink-300 transform hover:scale-[1.02] relative overflow-hidden"
+                className="w-full px-6 py-4 bg-gradient-to-r from-pink-100 via-pink-50 to-red-100 hover:from-pink-200 hover:via-pink-100 hover:to-red-200 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-between group border-2 border-pink-200 hover:border-pink-300 transform hover:scale-[1.02] relative overflow-hidden"
               >
                 {/* Animated background shimmer */}
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
                 
                 <div className="flex items-center gap-3 relative z-10">
-                  <div className="w-9 h-9 rounded-full bg-gradient-to-br from-pink-500 via-pink-600 to-red-600 flex items-center justify-center text-white text-xs font-bold shadow-md group-hover:shadow-lg transition-all duration-300 group-hover:scale-110 group-hover:rotate-12">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-500 via-pink-600 to-red-600 flex items-center justify-center text-white text-xs font-bold shadow-md group-hover:shadow-lg transition-all duration-300 group-hover:scale-110 group-hover:rotate-12">
                     <Globe className="w-5 h-5" />
                   </div>
                   <span className="text-gray-800 font-bold text-base">{selectedLanguage.name}</span>
@@ -191,7 +177,7 @@ export default function Page() {
           </div>
 
           {/* Start Button */}
-          <div className="mt-8">
+          <div className="mt-6">
             <button
               onClick={handleStartTest}
               className="w-full py-4 px-8 bg-gradient-to-r from-pink-500 via-pink-600 to-red-600 hover:from-pink-600 hover:via-red-500 hover:to-red-700 text-white text-lg sm:text-xl font-bold rounded-full shadow-xl hover:shadow-2xl transform hover:scale-105 active:scale-95 transition-all duration-300 flex items-center justify-center gap-3 group relative overflow-hidden"
@@ -204,9 +190,19 @@ export default function Page() {
             </button>
           </div>
 
+          {/* Disclaimer - Below Start Button */}
+          <div className="space-y-2 text-gray-600 text-xs sm:text-sm leading-relaxed mt-6 max-w-2xl mx-auto text-center italic">
+            <p>
+              English is the primary language of communication. In case of any difference in translated text, please refer to the English version only.
+            </p>
+            <p>
+              All reports would be generated in English language only.
+            </p>
+          </div>
+
           {/* Footer Note */}
-          <div className="text-center text-xs sm:text-sm text-gray-500 mt-6">
-            <p>Takes approximately 5-10 minutes</p>
+          <div className="text-center text-xs sm:text-sm text-gray-500 mt-4">
+            <p>Takes approximately 8-10 minutes</p>
           </div>
         </div>
       </div>
