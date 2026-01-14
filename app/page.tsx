@@ -106,7 +106,7 @@ export default function Page() {
               The test is available in <span className="font-bold text-red-600">15 languages</span>, so choose the one you&apos;re most comfortable with.
             </p>
 
-            <p className="text-center text-gray-600 text-sm sm:text-base leading-relaxed italic">
+            <p className="text-center text-gray-600 text-sm sm:text-base leading-relaxed ">
               This isn&apos;t a test to pass or fail. It&apos;s a pause you rarely take.
             </p>
 
