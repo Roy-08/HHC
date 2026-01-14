@@ -499,46 +499,31 @@ export default function QuizPage() {
 
   const progress = (currentPage / totalPages) * 100;
 
-  // Thank You Page - Centered Premium Design with Image Icon
+  // Thank You Page - Mobile Optimized
   if (showThankYou) {
     return (
-      <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-rose-50 via-pink-50 to-red-50 flex items-center justify-center">
+      <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-rose-50 via-pink-50 to-red-50 flex items-center justify-center p-4">
         {/* Animated Background Elements */}
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-pink-200/40 to-red-200/40 rounded-full blur-3xl opacity-60"></div>
           <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-tr from-rose-200/40 to-orange-200/40 rounded-full blur-3xl opacity-60"></div>
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-pink-100/20 to-red-100/20 rounded-full blur-3xl opacity-60"></div>
         </div>
 
-        {/* Floating Particles */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          {[...Array(20)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute w-2 h-2 bg-gradient-to-br from-pink-400 to-red-400 rounded-full opacity-20"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-              }}
-            />
-          ))}
-        </div>
-
-        {/* Main Content - Centered */}
-        <div className="relative w-full max-w-2xl px-4">
-          <div className="relative bg-white/90 backdrop-blur-2xl rounded-[3rem] shadow-2xl border border-white/60 overflow-hidden">
+        {/* Main Content - Centered and Mobile Optimized */}
+        <div className="relative w-full max-w-lg">
+          <div className="relative bg-white/90 backdrop-blur-2xl rounded-3xl md:rounded-[3rem] shadow-2xl border border-white/60 overflow-hidden">
             {/* Decorative Top Border */}
-            <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-pink-500 via-red-500 to-rose-500"></div>
+            <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-pink-500 via-red-500 to-rose-500"></div>
             
-            <div className="p-8 md:p-16 text-center">
-              {/* Email Icon - Centered */}
-              <div className="flex justify-center mb-10">
+            <div className="p-6 md:p-12 text-center">
+              {/* Email Icon - Mobile Optimized */}
+              <div className="flex justify-center mb-6 md:mb-10">
                 <div className="relative inline-block">
                   {/* Outer Glow Ring */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-pink-400 to-red-500 rounded-full blur-2xl opacity-40"></div>
+                  <div className="absolute inset-0 bg-gradient-to-br from-pink-400 to-red-500 rounded-full blur-xl md:blur-2xl opacity-40"></div>
                   
                   {/* Icon Container */}
-                  <div className="relative w-32 h-32 md:w-40 md:h-40 bg-gradient-to-br from-[#de0f3f] via-[#ff4466] to-[#ff6b6b] rounded-full shadow-2xl flex items-center justify-center transform hover:scale-105 transition-transform duration-500">
+                  <div className="relative w-24 h-24 md:w-32 md:h-32 bg-gradient-to-br from-[#de0f3f] via-[#ff4466] to-[#ff6b6b] rounded-full shadow-2xl flex items-center justify-center transform hover:scale-105 transition-transform duration-500">
                     {/* Inner Glow */}
                     <div className="absolute inset-2 bg-gradient-to-br from-white/20 to-transparent rounded-full"></div>
                     
@@ -547,23 +532,18 @@ export default function QuizPage() {
                       <img 
                         src="https://cdn-icons-png.flaticon.com/512/945/945467.png"
                         alt="Email Icon"
-                        className="w-16 h-16 md:w-20 md:h-20 drop-shadow-lg"
+                        className="w-12 h-12 md:w-16 md:h-16 drop-shadow-lg"
                         style={{ filter: 'brightness(0) invert(1)' }}
                       />
                     </div>
                     
-                    {/* Sparkles */}
-                    <div className="absolute -top-2 -right-2 w-6 h-6 text-yellow-300">
+                    {/* Sparkles - Smaller on mobile */}
+                    <div className="absolute -top-1 -right-1 md:-top-2 md:-right-2 w-4 h-4 md:w-6 md:h-6 text-yellow-300">
                       <svg fill="currentColor" viewBox="0 0 24 24">
                         <path d="M12 0L14.59 8.41L23 11L14.59 13.59L12 22L9.41 13.59L1 11L9.41 8.41L12 0Z" />
                       </svg>
                     </div>
-                    <div className="absolute -bottom-3 -left-3 w-5 h-5 text-yellow-300">
-                      <svg fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M12 0L14.59 8.41L23 11L14.59 13.59L12 22L9.41 13.59L1 11L9.41 8.41L12 0Z" />
-                      </svg>
-                    </div>
-                    <div className="absolute top-1/2 -right-4 w-4 h-4 text-yellow-300">
+                    <div className="absolute -bottom-2 -left-2 md:-bottom-3 md:-left-3 w-3 h-3 md:w-5 md:h-5 text-yellow-300">
                       <svg fill="currentColor" viewBox="0 0 24 24">
                         <path d="M12 0L14.59 8.41L23 11L14.59 13.59L12 22L9.41 13.59L1 11L9.41 8.41L12 0Z" />
                       </svg>
@@ -572,47 +552,49 @@ export default function QuizPage() {
                 </div>
               </div>
 
-              {/* Thank You Text with Gradient - Centered */}
-              <h1 className="text-5xl md:text-7xl font-black mb-6 bg-clip-text text-transparent bg-gradient-to-r from-[#de0f3f] via-[#ff4466] to-[#ff6b6b]">
+              {/* Thank You Text - Mobile Optimized */}
+              <h1 className="text-4xl md:text-6xl font-black mb-4 md:mb-6 bg-clip-text text-transparent bg-gradient-to-r from-[#de0f3f] via-[#ff4466] to-[#ff6b6b]">
                 Thank You
               </h1>
 
-              {/* Success Message - Centered */}
-              <div className="mb-8 space-y-3">
-                <p className="text-xl md:text-2xl text-gray-800 font-semibold">
+              {/* Success Message - Mobile Optimized */}
+              <div className="mb-6 md:mb-8 space-y-2">
+                <p className="text-lg md:text-xl text-gray-800 font-semibold px-2">
                   Your Happiness Report is on its way! 🎉
                 </p>
-                <p className="text-lg text-gray-600">
+                <p className="text-base md:text-lg text-gray-600 px-2">
                   We&apos;ve sent your personalized insights to
                 </p>
               </div>
 
-              {/* Email Display with Simple Icon - Centered */}
-              <div className="mb-10 inline-flex items-center gap-3 px-6 py-4 bg-gradient-to-r from-pink-50 to-red-50 rounded-2xl border-2 border-pink-200 shadow-lg">
-                <svg className="w-5 h-5 text-[#de0f3f]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-                <span className="text-lg md:text-xl font-bold text-[#de0f3f]">
-                  {form.email}
-                </span>
+              {/* Email Display - Mobile Optimized with Overflow Handling */}
+              <div className="mb-6 md:mb-10 px-2">
+                <div className="inline-flex items-center gap-2 md:gap-3 px-4 md:px-6 py-3 md:py-4 bg-gradient-to-r from-pink-50 to-red-50 rounded-xl md:rounded-2xl border-2 border-pink-200 shadow-lg max-w-full">
+                  <svg className="w-4 h-4 md:w-5 md:h-5 text-[#de0f3f] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                  <span className="text-sm md:text-lg font-bold text-[#de0f3f] break-all">
+                    {form.email}
+                  </span>
+                </div>
               </div>
 
-              {/* Decorative Divider - Centered */}
-              <div className="flex items-center justify-center mb-10">
-                <div className="h-1 w-32 bg-gradient-to-r from-transparent via-pink-300 to-transparent rounded-full"></div>
-                <div className="mx-4 w-3 h-3 bg-gradient-to-br from-pink-400 to-red-500 rounded-full"></div>
-                <div className="h-1 w-32 bg-gradient-to-r from-transparent via-red-300 to-transparent rounded-full"></div>
+              {/* Decorative Divider - Mobile Optimized */}
+              <div className="flex items-center justify-center mb-6 md:mb-10 px-4">
+                <div className="h-0.5 md:h-1 w-20 md:w-32 bg-gradient-to-r from-transparent via-pink-300 to-transparent rounded-full"></div>
+                <div className="mx-3 md:mx-4 w-2 h-2 md:w-3 md:h-3 bg-gradient-to-br from-pink-400 to-red-500 rounded-full"></div>
+                <div className="h-0.5 md:h-1 w-20 md:w-32 bg-gradient-to-r from-transparent via-red-300 to-transparent rounded-full"></div>
               </div>
 
-              {/* Action Button - Centered */}
+              {/* Action Button - Mobile Optimized */}
               <button
                 onClick={handleBackToHome}
-                className="group relative inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-[#de0f3f] via-[#ff4466] to-[#ff6b6b] text-white font-bold text-lg rounded-full shadow-2xl hover:shadow-[#de0f3f]/50 transform hover:-translate-y-1 hover:scale-105 transition-all duration-300 overflow-hidden"
+                className="group relative inline-flex items-center gap-2 md:gap-3 px-8 md:px-10 py-4 md:py-5 bg-gradient-to-r from-[#de0f3f] via-[#ff4466] to-[#ff6b6b] text-white font-bold text-base md:text-lg rounded-full shadow-2xl hover:shadow-[#de0f3f]/50 transform hover:-translate-y-1 hover:scale-105 transition-all duration-300 overflow-hidden"
               >
                 {/* Button Shine Effect */}
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000"></div>
                 
-                <svg className="w-6 h-6 relative z-10 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 md:w-6 md:h-6 relative z-10 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
                 <span className="relative z-10">Back to Home</span>
@@ -624,7 +606,7 @@ export default function QuizPage() {
     );
   }
 
-  // Form Page
+  // Form Page - Mobile Optimized
   if (showForm) {
     return (
       <div className="min-h-screen relative overflow-hidden">
@@ -636,27 +618,27 @@ export default function QuizPage() {
           </div>
         </div>
 
-        <div className="relative min-h-screen flex items-center justify-center p-4 py-12">
-          <div className="w-full max-w-3xl">
-            <div className="bg-white/80 backdrop-blur-lg p-6 md:p-12 rounded-3xl shadow-2xl border border-white/50">
-              <div className="text-center mb-8">
-                <div className="inline-block p-4 bg-gradient-to-br from-[#de0f3f] to-[#ff6b6b] rounded-full mb-4">
-                  <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="relative min-h-screen flex items-center justify-center p-4 py-8">
+          <div className="w-full max-w-2xl">
+            <div className="bg-white/80 backdrop-blur-lg p-5 md:p-10 rounded-2xl md:rounded-3xl shadow-2xl border border-white/50">
+              <div className="text-center mb-6 md:mb-8">
+                <div className="inline-block p-3 md:p-4 bg-gradient-to-br from-[#de0f3f] to-[#ff6b6b] rounded-full mb-3 md:mb-4">
+                  <svg className="w-8 h-8 md:w-10 md:h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
-                <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-[#de0f3f] mb-3">
+                <h1 className="text-3xl md:text-4xl font-bold text-[#de0f3f] mb-2 md:mb-3">
                   Almost There!
                 </h1>
-                <p className="text-gray-600 text-lg">
+                <p className="text-gray-600 text-sm md:text-base px-2">
                   Just a few details to unlock your personalized happiness insights
                 </p>
               </div>
 
-              <form className="space-y-6" onSubmit={handleFormSubmit}>
+              <form className="space-y-4 md:space-y-5" onSubmit={handleFormSubmit}>
                 {/* NAME */}
                 <div className="group">
-                  <label className="block text-sm font-bold text-gray-700 mb-2">
+                  <label className="block text-xs md:text-sm font-bold text-gray-700 mb-1.5">
                     Full Name <span className="text-[#de0f3f]">*</span>
                   </label>
                   <input
@@ -664,14 +646,14 @@ export default function QuizPage() {
                     placeholder="Enter your full name"
                     value={form.name}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
-                    className="w-full px-0 py-3 bg-transparent border-b-2 border-gray-300 focus:border-[#de0f3f] focus:outline-none transition-all duration-300 text-gray-800 text-base placeholder-gray-400"
+                    className="w-full px-0 py-2 md:py-2.5 bg-transparent border-b-2 border-gray-300 focus:border-[#de0f3f] focus:outline-none transition-all duration-300 text-gray-800 text-sm md:text-base placeholder-gray-400"
                     required
                   />
                 </div>
 
                 {/* EMAIL */}
                 <div className="group">
-                  <label className="block text-sm font-bold text-gray-700 mb-2">
+                  <label className="block text-xs md:text-sm font-bold text-gray-700 mb-1.5">
                     Email Address <span className="text-[#de0f3f]">*</span>
                   </label>
                   <input
@@ -679,14 +661,14 @@ export default function QuizPage() {
                     placeholder="your.email@example.com"
                     value={form.email}
                     onChange={(e) => setForm({ ...form, email: e.target.value })}
-                    className="w-full px-0 py-3 bg-transparent border-b-2 border-gray-300 focus:border-[#de0f3f] focus:outline-none transition-all duration-300 text-gray-800 text-base placeholder-gray-400"
+                    className="w-full px-0 py-2 md:py-2.5 bg-transparent border-b-2 border-gray-300 focus:border-[#de0f3f] focus:outline-none transition-all duration-300 text-gray-800 text-sm md:text-base placeholder-gray-400"
                     required
                   />
                 </div>
 
                 {/* MOBILE */}
                 <div className="group">
-                  <label className="block text-sm font-bold text-gray-700 mb-2">
+                  <label className="block text-xs md:text-sm font-bold text-gray-700 mb-1.5">
                     Mobile Number <span className="text-[#de0f3f]">*</span>
                   </label>
                   <input
@@ -694,14 +676,14 @@ export default function QuizPage() {
                     placeholder="+1234567890"
                     value={form.mobile}
                     onChange={(e) => setForm({ ...form, mobile: e.target.value })}
-                    className="w-full px-0 py-3 bg-transparent border-b-2 border-gray-300 focus:border-[#de0f3f] focus:outline-none transition-all duration-300 text-gray-800 text-base placeholder-gray-400"
+                    className="w-full px-0 py-2 md:py-2.5 bg-transparent border-b-2 border-gray-300 focus:border-[#de0f3f] focus:outline-none transition-all duration-300 text-gray-800 text-sm md:text-base placeholder-gray-400"
                     required
                   />
                 </div>
 
-                {/* BIRTHDATE */}
+                {/* BIRTHDATE - Fixed Height */}
                 <div className="group">
-                  <label className="block text-sm font-bold text-gray-700 mb-2">
+                  <label className="block text-xs md:text-sm font-bold text-gray-700 mb-1.5">
                     Date of Birth <span className="text-[#de0f3f]">*</span>
                   </label>
                   <input
@@ -712,24 +694,24 @@ export default function QuizPage() {
                       setForm({ ...form, birthdate: e.target.value });
                       validateBirthdate(e.target.value);
                     }}
-                    className="w-full px-0 py-3 bg-transparent border-b-2 border-gray-300 focus:border-[#de0f3f] focus:outline-none transition-all duration-300 text-gray-800 text-base"
+                    className="w-full px-0 py-2 md:py-2.5 bg-transparent border-b-2 border-gray-300 focus:border-[#de0f3f] focus:outline-none transition-all duration-300 text-gray-800 text-sm md:text-base h-10 md:h-11"
                     required
                   />
                   {dateError && (
-                    <p className="mt-2 text-sm text-red-600 font-medium">{dateError}</p>
+                    <p className="mt-1.5 text-xs md:text-sm text-red-600 font-medium">{dateError}</p>
                   )}
                 </div>
 
                 {/* GENDER */}
                 <div className="group">
-                  <label className="block text-sm font-bold text-gray-700 mb-2">
+                  <label className="block text-xs md:text-sm font-bold text-gray-700 mb-1.5">
                     Gender <span className="text-[#de0f3f]">*</span>
                   </label>
                   <div className="relative">
                     <select
                       value={form.gender}
                       onChange={(e) => setForm({ ...form, gender: e.target.value })}
-                      className="w-full px-0 py-3 bg-transparent border-b-2 border-gray-300 focus:border-[#de0f3f] focus:outline-none transition-all duration-300 text-gray-800 text-base cursor-pointer appearance-none"
+                      className="w-full px-0 py-2 md:py-2.5 bg-transparent border-b-2 border-gray-300 focus:border-[#de0f3f] focus:outline-none transition-all duration-300 text-gray-800 text-sm md:text-base cursor-pointer appearance-none"
                       style={{ color: form.gender ? '#1f2937' : '#9ca3af' }}
                       required
                     >
@@ -739,7 +721,7 @@ export default function QuizPage() {
                       <option value="Non-binary" style={{ color: '#1f2937' }}>Non-binary</option>
                     </select>
                     <div className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2">
-                      <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-4 h-4 md:w-5 md:h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                       </svg>
                     </div>
@@ -748,16 +730,16 @@ export default function QuizPage() {
 
                 {/* COUNTRY */}
                 <div className="group" ref={dropdownRef}>
-                  <label className="block text-sm font-bold text-gray-700 mb-2">
+                  <label className="block text-xs md:text-sm font-bold text-gray-700 mb-1.5">
                     Country <span className="text-[#de0f3f]">*</span>
                   </label>
                   <div className="relative">
-                    <div className="flex items-center w-full px-0 py-3 border-b-2 border-gray-300 focus-within:border-[#de0f3f] transition-all duration-300 cursor-pointer">
+                    <div className="flex items-center w-full px-0 py-2 md:py-2.5 border-b-2 border-gray-300 focus-within:border-[#de0f3f] transition-all duration-300 cursor-pointer">
                       {selectedCountry && (
                         <img
                           src={selectedCountry.flag}
                           alt={selectedCountry.name}
-                          className="w-8 h-6 object-cover mr-3 rounded shadow-sm"
+                          className="w-6 h-4 md:w-7 md:h-5 object-cover mr-2 md:mr-3 rounded shadow-sm"
                         />
                       )}
                       <input
@@ -775,17 +757,17 @@ export default function QuizPage() {
                           );
                           setCountries(filtered);
                         }}
-                        className="flex-1 focus:outline-none text-gray-800 text-base bg-transparent placeholder-gray-400"
+                        className="flex-1 focus:outline-none text-gray-800 text-sm md:text-base bg-transparent placeholder-gray-400"
                         required
                       />
                     </div>
 
                     {dropdownOpen && (
-                      <div className="absolute z-20 w-full bg-white border-2 border-gray-200 mt-2 max-h-60 overflow-y-auto rounded-2xl shadow-xl">
+                      <div className="absolute z-20 w-full bg-white border-2 border-gray-200 mt-2 max-h-48 md:max-h-60 overflow-y-auto rounded-xl md:rounded-2xl shadow-xl">
                         {countries.map((c) => (
                           <div
                             key={c.code}
-                            className="flex items-center gap-3 px-5 py-3 cursor-pointer hover:bg-gradient-to-r hover:from-[#ffe6e6] hover:to-[#fff0f0] transition-all duration-200 text-gray-800"
+                            className="flex items-center gap-2 md:gap-3 px-3 md:px-4 py-2 md:py-2.5 cursor-pointer hover:bg-gradient-to-r hover:from-[#ffe6e6] hover:to-[#fff0f0] transition-all duration-200 text-gray-800 text-sm md:text-base"
                             onClick={() => {
                               setSelectedCountry(c);
                               setForm({ ...form, country: c.name });
@@ -795,13 +777,13 @@ export default function QuizPage() {
                             <img
                               src={c.flag}
                               alt={c.name}
-                              className="w-8 h-6 object-cover rounded shadow-sm"
+                              className="w-6 h-4 md:w-7 md:h-5 object-cover rounded shadow-sm"
                             />
                             <span className="font-medium">{c.name}</span>
                           </div>
                         ))}
                         {countries.length === 0 && (
-                          <div className="px-5 py-4 text-gray-500 text-center">
+                          <div className="px-4 py-3 text-gray-500 text-center text-sm">
                             No country found
                           </div>
                         )}
@@ -812,14 +794,14 @@ export default function QuizPage() {
 
                 {/* OCCUPATION */}
                 <div className="group">
-                  <label className="block text-sm font-bold text-gray-700 mb-2">
+                  <label className="block text-xs md:text-sm font-bold text-gray-700 mb-1.5">
                     Occupation <span className="text-[#de0f3f]">*</span>
                   </label>
                   <div className="relative">
                     <select
                       value={form.occupation}
                       onChange={(e) => setForm({ ...form, occupation: e.target.value })}
-                      className="w-full px-0 py-3 bg-transparent border-b-2 border-gray-300 focus:border-[#de0f3f] focus:outline-none transition-all duration-300 text-gray-800 text-base cursor-pointer appearance-none"
+                      className="w-full px-0 py-2 md:py-2.5 bg-transparent border-b-2 border-gray-300 focus:border-[#de0f3f] focus:outline-none transition-all duration-300 text-gray-800 text-sm md:text-base cursor-pointer appearance-none"
                       style={{ color: form.occupation ? '#1f2937' : '#9ca3af' }}
                       required
                     >
@@ -832,7 +814,7 @@ export default function QuizPage() {
                       <option value="Currently Not Working" style={{ color: '#1f2937' }}>Currently Not Working</option>
                     </select>
                     <div className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2">
-                      <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-4 h-4 md:w-5 md:h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                       </svg>
                     </div>
@@ -843,7 +825,7 @@ export default function QuizPage() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className={`w-full py-5 rounded-2xl font-bold text-lg text-white transition-all duration-300 transform relative overflow-hidden group mt-8 ${
+                  className={`w-full py-4 md:py-5 rounded-xl md:rounded-2xl font-bold text-base md:text-lg text-white transition-all duration-300 transform relative overflow-hidden group mt-6 md:mt-8 ${
                     loading
                       ? 'bg-gray-400 cursor-not-allowed'
                       : 'bg-gradient-to-r from-[#de0f3f] to-[#ff6b6b] hover:shadow-2xl hover:shadow-[#de0f3f]/50 hover:-translate-y-1 active:translate-y-0'
@@ -851,14 +833,14 @@ export default function QuizPage() {
                 >
                   <span className="relative z-10">
                     {loading ? (
-                      <div className="flex items-center justify-center gap-3">
-                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      <div className="flex items-center justify-center gap-2 md:gap-3">
+                        <div className="w-4 h-4 md:w-5 md:h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                         <span>Submitting...</span>
                       </div>
                     ) : (
                       <div className="flex items-center justify-center gap-2 cursor-pointer">
                         <span>Submit & View Results</span>
-                        <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                         </svg>
                       </div>
@@ -867,20 +849,20 @@ export default function QuizPage() {
                 </button>
               </form>
 
-              <div className="mt-6 text-center">
+              <div className="mt-5 md:mt-6 text-center">
                 <button
                   onClick={() => setShowForm(false)}
-                  className="inline-flex cursor-pointer items-center gap-2 text-[#de0f3f] hover:text-[#c00d37] font-semibold transition-colors group"
+                  className="inline-flex cursor-pointer items-center gap-1.5 md:gap-2 text-[#de0f3f] hover:text-[#c00d37] font-semibold transition-colors group text-sm md:text-base"
                 >
-                  <svg className="w-5 h-5 cursor-pointer group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 md:w-5 md:h-5 cursor-pointer group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 17l-5-5m0 0l5-5m-5 5h12" />
                   </svg>
                   <span>Back to Questions</span>
                 </button>
               </div>
 
-              <div className="mt-6 pt-6 border-t border-gray-200 flex items-center justify-center gap-2 text-sm text-gray-500">
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <div className="mt-4 md:mt-6 pt-4 md:pt-6 border-t border-gray-200 flex items-center justify-center gap-1.5 md:gap-2 text-xs md:text-sm text-gray-500">
+                <svg className="w-3 h-3 md:w-4 md:h-4" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
                 </svg>
                 <span>Your information is secure and confidential</span>
