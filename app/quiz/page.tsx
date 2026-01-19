@@ -277,7 +277,7 @@ export default function QuizPage() {
   const [showAlert, setShowAlert] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [showThankYou, setShowThankYou] = useState(false);
-  const [certificateUrl, setCertificateUrl] = useState('');
+  const [certificateDataUrl, setCertificateDataUrl] = useState('');
 
   // Form states
   const [countries, setCountries] = useState<Country[]>([]);
@@ -478,8 +478,8 @@ export default function QuizPage() {
     })
     .then(res => res.json())
     .then(data => {
-      if (data.certificateUrl) {
-        setCertificateUrl(data.certificateUrl);
+      if (data.certificateDataUrl) {
+        setCertificateDataUrl(data.certificateDataUrl);
       }
     })
     .catch(error => {
@@ -492,7 +492,7 @@ export default function QuizPage() {
     setCurrentPage(1);
     setShowForm(false);
     setShowThankYou(false);
-    setCertificateUrl('');
+    setCertificateDataUrl('');
     setForm({
       name: '',
       email: '',
@@ -507,52 +507,71 @@ export default function QuizPage() {
     router.push('/');
   };
 
-  // Download certificate helper
-  const downloadCertificate = async (url: string): Promise<Blob | null> => {
+  // Convert data URL to blob for download
+  const dataURLtoBlob = (dataUrl: string): Blob | null => {
     try {
-      const response = await fetch(url);
-      if (!response.ok) throw new Error('Failed to fetch certificate');
-      return await response.blob();
+      const arr = dataUrl.split(',');
+      const mimeMatch = arr[0].match(/:(.*?);/);
+      if (!mimeMatch) return null;
+      
+      const mime = mimeMatch[1];
+      const bstr = atob(arr[1]);
+      let n = bstr.length;
+      const u8arr = new Uint8Array(n);
+      
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+      
+      return new Blob([u8arr], { type: mime });
     } catch (error) {
-      console.error('Error downloading certificate:', error);
+      console.error('Error converting data URL to blob:', error);
       return null;
     }
   };
 
+  // Download certificate from data URL
+  const downloadCertificateFromDataUrl = (dataUrl: string, filename: string) => {
+    const blob = dataURLtoBlob(dataUrl);
+    if (!blob) {
+      console.error('Failed to convert certificate to blob');
+      return;
+    }
+
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   // WhatsApp Share
-  const handleShareWhatsApp = async () => {
-    if (!certificateUrl) {
+  const handleShareWhatsApp = () => {
+    if (!certificateDataUrl) {
       alert('Certificate is being generated. Please wait a moment and try again.');
       return;
     }
 
     const shareText = `🎉 I just completed my Happiness Index assessment!\n\nDiscover your happiness score and get personalized insights.\n\nTake the quiz: ${window.location.origin}`;
     
-    // WhatsApp Web API with text (image needs to be shared separately)
+    // WhatsApp Web API with text
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
     window.open(whatsappUrl, '_blank');
     
-    // Also download certificate so user can share it manually
-    const blob = await downloadCertificate(certificateUrl);
-    if (blob) {
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = '/images/Certificate.jpg';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-      
-      setTimeout(() => {
-        alert('📱 Certificate downloaded! After sending the text, you can attach the certificate image from your downloads.');
-      }, 500);
-    }
+    // Download certificate so user can share it manually
+    downloadCertificateFromDataUrl(certificateDataUrl, '/certificate.png');
+    
+    setTimeout(() => {
+      alert('📱 Certificate downloaded! After sending the text, you can attach the certificate image from your downloads.');
+    }, 500);
   };
 
-  // Instagram Share (Mobile: download + open app, Desktop: download + instructions)
-  const handleShareInstagram = async () => {
-    if (!certificateUrl) {
+  // Instagram Share
+  const handleShareInstagram = () => {
+    if (!certificateDataUrl) {
       alert('Certificate is being generated. Please wait a moment and try again.');
       return;
     }
@@ -560,24 +579,11 @@ export default function QuizPage() {
     const shareText = "I just completed my Happiness Index assessment! 🎉 Discover your happiness score and get personalized insights.";
     
     // Download certificate
-    const blob = await downloadCertificate(certificateUrl);
-    if (blob) {
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = '/images/Certificate.jpg';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    }
+    downloadCertificateFromDataUrl(certificateDataUrl, '/certificate.png');
 
     // Copy text to clipboard
-    try {
-      await navigator.clipboard.writeText(`${shareText}\n\n${window.location.origin}`);
-    } catch (err) {
-      console.error('Failed to copy text:', err);
-    }
+    navigator.clipboard.writeText(`${shareText}\n\n${window.location.origin}`)
+      .catch(err => console.error('Failed to copy text:', err));
 
     // Detect mobile
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
@@ -598,9 +604,9 @@ export default function QuizPage() {
     }
   };
 
-  // Facebook Share (Mobile: download + open app, Desktop: download + instructions)
-  const handleShareFacebook = async () => {
-    if (!certificateUrl) {
+  // Facebook Share
+  const handleShareFacebook = () => {
+    if (!certificateDataUrl) {
       alert('Certificate is being generated. Please wait a moment and try again.');
       return;
     }
@@ -608,24 +614,11 @@ export default function QuizPage() {
     const shareText = "I just completed my Happiness Index assessment! 🎉 Discover your happiness score and get personalized insights.";
     
     // Download certificate
-    const blob = await downloadCertificate(certificateUrl);
-    if (blob) {
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = '/images/Certificate.jpg';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    }
+    downloadCertificateFromDataUrl(certificateDataUrl, '/images/photo1768804033.jpg');
 
     // Copy text to clipboard
-    try {
-      await navigator.clipboard.writeText(`${shareText}\n\n${window.location.origin}`);
-    } catch (err) {
-      console.error('Failed to copy text:', err);
-    }
+    navigator.clipboard.writeText(`${shareText}\n\n${window.location.origin}`)
+      .catch(err => console.error('Failed to copy text:', err));
 
     // Detect mobile
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
