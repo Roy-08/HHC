@@ -15,20 +15,20 @@ export async function POST(req: Request) {
     // Determine category based on score
     const category = getCategory(totalScore);
 
-    // Generate personalized certificate and get URL
-    let certificateUrl = "";
+    // Generate personalized certificate and get base64 data URL
+    let certificateDataUrl = "";
     try {
-      certificateUrl = await generateCertificate(name, totalScore, category);
-      console.log("✅ Certificate generated:", certificateUrl);
+      certificateDataUrl = await generateCertificate(name, totalScore, category);
+      console.log("✅ Certificate generated as data URL");
     } catch (certError) {
       console.error("Certificate generation failed:", certError);
-      certificateUrl = "";
+      certificateDataUrl = "";
     }
 
-    // Send email with PDF link and certificate URL
+    // Send email with PDF link and certificate data URL
     let mailStatus = "Sent";
     try {
-      await sendEmail({ name, email, totalScore, category, certificateUrl });
+      await sendEmail({ name, email, totalScore, category, certificateDataUrl });
     } catch (emailError) {
       console.error("Email sending failed:", emailError);
       mailStatus = "Failed";
@@ -57,7 +57,7 @@ export async function POST(req: Request) {
       score: totalScore,
       category,
       mailStatus,
-      certificateUrl
+      certificateDataUrl
     });
 
   } catch (err) {
@@ -68,6 +68,7 @@ export async function POST(req: Request) {
 
 /* -----------------------------
    CERTIFICATE GENERATION
+   Returns base64 data URL instead of saving to disk
 ----------------------------- */
 async function generateCertificate(name: string, score: number, category: string): Promise<string> {
   try {
@@ -105,30 +106,14 @@ async function generateCertificate(name: string, score: number, category: string
     const nameY = image.height * 0.48;
     ctx.fillText(name, image.width / 2, nameY);
 
-    // Create certificates directory if it doesn't exist
-    const certificatesDir = path.join(process.cwd(), "public", "certificates");
-    if (!fs.existsSync(certificatesDir)) {
-      fs.mkdirSync(certificatesDir, { recursive: true });
-      console.log("Created certificates directory:", certificatesDir);
-    }
-
-    // Generate unique filename
-    const timestamp = Date.now();
-    const sanitizedName = name.replace(/\s+/g, "_").replace(/[^a-zA-Z0-9_]/g, "");
-    const fileName = `certificate_${sanitizedName}_${timestamp}.png`;
-    const filePath = path.join(certificatesDir, fileName);
-    
-    // Save the certificate
+    // Convert canvas to base64 data URL
     const buffer = canvas.toBuffer("image/png");
-    fs.writeFileSync(filePath, buffer);
-    console.log("Certificate saved to:", filePath);
-
-    // Return the public URL
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-    const certificateUrl = `${baseUrl}/certificates/${fileName}`;
-    console.log("Certificate URL:", certificateUrl);
+    const base64Image = buffer.toString("base64");
+    const dataUrl = `data:image/png;base64,${base64Image}`;
     
-    return certificateUrl;
+    console.log("Certificate generated as data URL (length:", dataUrl.length, ")");
+    
+    return dataUrl;
 
   } catch (error) {
     console.error("Error generating certificate:", error);
@@ -167,13 +152,13 @@ async function sendEmail({
   email, 
   totalScore, 
   category, 
-  certificateUrl 
+  certificateDataUrl 
 }: { 
   name: string; 
   email: string; 
   totalScore: number; 
   category: string;
-  certificateUrl: string;
+  certificateDataUrl: string;
 }) {
   try {
     const pdfFileName = getPdfName(totalScore);
@@ -198,7 +183,7 @@ async function sendEmail({
 
     const gmail = google.gmail({ version: "v1", auth: oAuth2Client });
 
-    const htmlContent = generateHTMLEmail(name, totalScore, category, pdfUrl, certificateUrl);
+    const htmlContent = generateHTMLEmail(name, totalScore, category, pdfUrl, certificateDataUrl);
 
     const rawMessage = [
       `From: Dr. Vrushali <${process.env.GMAIL_EMAIL}>`,
@@ -329,34 +314,22 @@ function generateHTMLEmail(
   score: number, 
   category: string, 
   pdfUrl: string,
-  certificateUrl: string
+  certificateDataUrl: string
 ): string {
   const happinessCategory = getHappinessCategory(score);
   const explanation = getExplanation(score);
   const feedback = getFeedback(score);
 
-  // Only show certificate button if URL exists
-  const certificateButton = certificateUrl ? `
-                  <!-- Download Certificate Button -->
-                  <table cellpadding="0" cellspacing="0" border="0" role="presentation" class="button-container" style="display:inline-block; margin:0 8px 12px 8px;">
-                    <tr>
-                      <td align="center" style="border-radius:25px; background:linear-gradient(135deg, #d4af37, #f4c542);">
-                        <a href="${certificateUrl}" target="_blank" class="mobile-button" style="
-                          display:inline-block;
-                          padding:10px 28px;
-                          font-family:Arial, Helvetica, sans-serif;
-                          font-size:13px;
-                          font-weight:600;
-                          color:#1b6b36;
-                          text-decoration:none;
-                          border-radius:25px;
-                          letter-spacing:0.3px;
-                        ">
-                          🏆 Download Certificate
-                        </a>
-                      </td>
-                    </tr>
-                  </table>
+  // Embed certificate as inline image if data URL exists
+  const certificateSection = certificateDataUrl ? `
+    <!-- Certificate Image -->
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation" style="margin:20px 0;">
+      <tr>
+        <td align="center">
+          <img src="${certificateDataUrl}" alt="Your Certificate" style="max-width:100%; height:auto; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1);" />
+        </td>
+      </tr>
+    </table>
   ` : '';
 
   return `
@@ -529,11 +502,13 @@ function generateHTMLEmail(
               ${feedback}
             </p>
 
+            ${certificateSection}
+
             <p class="mobile-font-small" style="font-size:13px; color:#666666; margin:0 0 12px 0; text-align:center; line-height:1.4;">
-              Download your personalized documents below
+              Download your personalized report below
             </p>
 
-            <!-- Download Buttons -->
+            <!-- Download Button -->
             <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation" style="margin:12px 0 15px 0;">
               <tr>
                 <td align="center">
@@ -558,8 +533,6 @@ function generateHTMLEmail(
                       </td>
                     </tr>
                   </table>
-
-                  ${certificateButton}
 
                 </td>
               </tr>
