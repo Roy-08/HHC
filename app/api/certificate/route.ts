@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import puppeteer from "puppeteer";
+import puppeteer from "puppeteer-core";
+import chrome from "@sparticuz/chromium";
 
 export async function GET(req: NextRequest) {
   try {
@@ -56,15 +57,28 @@ async function generateCertificateWithPuppeteer(
     const year = currentDate.getFullYear();
     const formattedDate = `${day} ${month} ${year}`;
 
-    // Launch Puppeteer
+    // Launch Puppeteer with Chromium for Vercel
+    const isProduction = process.env.NODE_ENV === 'production';
+    
     browser = await puppeteer.launch({
-      headless: true,
-      args: [
+      args: isProduction ? chrome.args : [
         '--no-sandbox',
         '--disable-setuid-sandbox',
         '--disable-dev-shm-usage',
         '--disable-gpu'
-      ]
+      ],
+      defaultViewport: {
+        width: 1123,
+        height: 794
+      },
+      executablePath: isProduction 
+        ? await chrome.executablePath()
+        : process.platform === 'win32'
+        ? 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
+        : process.platform === 'darwin'
+        ? '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
+        : '/usr/bin/google-chrome',
+      headless: true,
     });
 
     const page = await browser.newPage();
@@ -545,8 +559,6 @@ async function generateCertificateWithPuppeteer(
 
     // Wait for fonts to load
     await page.evaluateHandle('document.fonts.ready');
-
-    
 
     // Take screenshot
     const screenshot = await page.screenshot({
