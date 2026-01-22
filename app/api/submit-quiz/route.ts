@@ -1,8 +1,5 @@
 import { NextResponse } from "next/server";
 import { google } from "googleapis";
-import { createCanvas, loadImage } from "canvas";
-import path from "path";
-import fs from "fs";
 
 export async function POST(req: Request) {
   try {
@@ -15,20 +12,10 @@ export async function POST(req: Request) {
     // Determine category based on score
     const category = getCategory(totalScore);
 
-    // Generate personalized certificate and get base64 data URL
-    let certificateDataUrl = "";
-    try {
-      certificateDataUrl = await generateCertificate(name, totalScore, category);
-      console.log("✅ Certificate generated as data URL");
-    } catch (certError) {
-      console.error("Certificate generation failed:", certError);
-      certificateDataUrl = "";
-    }
-
-    // Send email with PDF link and certificate data URL
+    // Send email with PDF link and certificate link
     let mailStatus = "Sent";
     try {
-      await sendEmail({ name, email, totalScore, category, certificateDataUrl });
+      await sendEmail({ name, email, totalScore, category });
     } catch (emailError) {
       console.error("Email sending failed:", emailError);
       mailStatus = "Failed";
@@ -56,68 +43,12 @@ export async function POST(req: Request) {
       message: "Quiz submitted successfully",
       score: totalScore,
       category,
-      mailStatus,
-      certificateDataUrl
+      mailStatus
     });
 
   } catch (err) {
     console.error("Server error:", err);
     return NextResponse.json({ error: "Server error" }, { status: 500 });
-  }
-}
-
-/* -----------------------------
-   CERTIFICATE GENERATION
-   Returns base64 data URL instead of saving to disk
------------------------------ */
-async function generateCertificate(name: string, score: number, category: string): Promise<string> {
-  try {
-    // Load the base certificate template from public folder
-    const templatePath = path.join(process.cwd(), "public", "/certificate.png");
-    console.log("Loading certificate template from:", templatePath);
-    
-    // Check if file exists
-    if (!fs.existsSync(templatePath)) {
-      throw new Error(`Certificate template not found at: ${templatePath}`);
-    }
-    
-    const image = await loadImage(templatePath);
-
-    // Create canvas with same dimensions as template
-    const canvas = createCanvas(image.width, image.height);
-    const ctx = canvas.getContext("2d");
-
-    // Draw the base certificate
-    ctx.drawImage(image, 0, 0);
-
-    // Configure text styling for name
-    ctx.font = "bold 90px 'Georgia', 'Times New Roman', serif";
-    ctx.fillStyle = "#000000";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-
-    // Add shadow for better visibility
-    ctx.shadowColor = "rgba(0, 0, 0, 0.2)";
-    ctx.shadowBlur = 3;
-    ctx.shadowOffsetX = 1;
-    ctx.shadowOffsetY = 1;
-
-    // Draw the user's name
-    const nameY = image.height * 0.48;
-    ctx.fillText(name, image.width / 2, nameY);
-
-    // Convert canvas to base64 data URL
-    const buffer = canvas.toBuffer("image/png");
-    const base64Image = buffer.toString("base64");
-    const dataUrl = `data:image/png;base64,${base64Image}`;
-    
-    console.log("Certificate generated as data URL (length:", dataUrl.length, ")");
-    
-    return dataUrl;
-
-  } catch (error) {
-    console.error("Error generating certificate:", error);
-    throw error;
   }
 }
 
@@ -151,18 +82,20 @@ async function sendEmail({
   name, 
   email, 
   totalScore, 
-  category, 
-  certificateDataUrl 
+  category
 }: { 
   name: string; 
   email: string; 
   totalScore: number; 
   category: string;
-  certificateDataUrl: string;
 }) {
   try {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
     const pdfFileName = getPdfName(totalScore);
-    const pdfUrl = `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/${pdfFileName}`;
+    const pdfUrl = `${baseUrl}/${pdfFileName}`;
+    
+    // Generate certificate download URL with query parameters
+    const certificateUrl = `${baseUrl}/api/certificate?name=${encodeURIComponent(name)}&score=${totalScore}`;
 
     const oAuth2Client = new google.auth.OAuth2(
       process.env.GMAIL_CLIENT_ID,
@@ -183,7 +116,7 @@ async function sendEmail({
 
     const gmail = google.gmail({ version: "v1", auth: oAuth2Client });
 
-    const htmlContent = generateHTMLEmail(name, totalScore, category, pdfUrl, certificateDataUrl);
+    const htmlContent = generateHTMLEmail(name, totalScore, category, pdfUrl, certificateUrl);
 
     const rawMessage = [
       `From: Dr. Vrushali <${process.env.GMAIL_EMAIL}>`,
@@ -314,23 +247,11 @@ function generateHTMLEmail(
   score: number, 
   category: string, 
   pdfUrl: string,
-  certificateDataUrl: string
+  certificateUrl: string
 ): string {
   const happinessCategory = getHappinessCategory(score);
   const explanation = getExplanation(score);
   const feedback = getFeedback(score);
-
-  // Embed certificate as inline image if data URL exists
-  const certificateSection = certificateDataUrl ? `
-    <!-- Certificate Image -->
-    <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation" style="margin:20px 0;">
-      <tr>
-        <td align="center">
-          <img src="${certificateDataUrl}" alt="Your Certificate" style="max-width:100%; height:auto; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1);" />
-        </td>
-      </tr>
-    </table>
-  ` : '';
 
   return `
 <!DOCTYPE html>
@@ -363,9 +284,6 @@ function generateHTMLEmail(
       .mobile-subheading {
         font-size: 14px !important;
       }
-      .mobile-icon-container {
-        padding: 0 3px !important;
-      }
       .mobile-divider {
         width: 100% !important;
       }
@@ -386,12 +304,12 @@ function generateHTMLEmail(
         word-wrap: break-word !important;
       }
       .mobile-button {
-        padding: 8px 20px !important;
+        padding: 10px 18px !important;
         font-size: 12px !important;
       }
       .button-container {
         display: block !important;
-        margin: 8px 0 !important;
+        margin: 6px 4px !important;
       }
     }
   </style>
@@ -502,24 +420,22 @@ function generateHTMLEmail(
               ${feedback}
             </p>
 
-            ${certificateSection}
-
             <p class="mobile-font-small" style="font-size:13px; color:#666666; margin:0 0 12px 0; text-align:center; line-height:1.4;">
-              Download your personalized report below
+              Download your personalized documents below
             </p>
 
-            <!-- Download Button -->
+            <!-- Download Buttons (Side by Side) -->
             <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation" style="margin:12px 0 15px 0;">
               <tr>
                 <td align="center">
                   
                   <!-- Download Report Button -->
-                  <table cellpadding="0" cellspacing="0" border="0" role="presentation" class="button-container" style="display:inline-block; margin:0 8px 12px 8px;">
+                  <table cellpadding="0" cellspacing="0" border="0" role="presentation" class="button-container" style="display:inline-block; margin:0 6px 12px 6px; vertical-align:top;">
                     <tr>
                       <td align="center" style="border-radius:25px; background:linear-gradient(135deg, #1b6b36, #2d8a4d);">
                         <a href="${pdfUrl}" target="_blank" class="mobile-button" style="
                           display:inline-block;
-                          padding:10px 28px;
+                          padding:12px 24px;
                           font-family:Arial, Helvetica, sans-serif;
                           font-size:13px;
                           font-weight:600;
@@ -529,6 +445,27 @@ function generateHTMLEmail(
                           letter-spacing:0.3px;
                         ">
                           📄 Download Report
+                        </a>
+                      </td>
+                    </tr>
+                  </table>
+
+                  <!-- Download Certificate Button -->
+                  <table cellpadding="0" cellspacing="0" border="0" role="presentation" class="button-container" style="display:inline-block; margin:0 6px 12px 6px; vertical-align:top;">
+                    <tr>
+                      <td align="center" style="border-radius:25px; background:linear-gradient(135deg, #d4af37, #f4c542);">
+                        <a href="${certificateUrl}" target="_blank" class="mobile-button" style="
+                          display:inline-block;
+                          padding:12px 24px;
+                          font-family:Arial, Helvetica, sans-serif;
+                          font-size:13px;
+                          font-weight:600;
+                          color:#2b4d36;
+                          text-decoration:none;
+                          border-radius:25px;
+                          letter-spacing:0.3px;
+                        ">
+                          🏆 Download Certificate
                         </a>
                       </td>
                     </tr>
@@ -554,47 +491,6 @@ function generateHTMLEmail(
                   <p style="margin:5px 0 0 0; font-family: 'Comic Sans MS', 'Trebuchet MS', Arial, sans-serif; font-size:18px; color:#2f4e39; line-height:1.3;">
                     Happiness Coach
                   </p>
-
-                  <!-- Social Icons -->
-                  <table align="center" cellpadding="0" cellspacing="0" border="0" role="presentation" style="margin-top:15px;">
-                    <tr>
-                      <td class="mobile-icon-container" style="padding:0 8px;">
-                        <a href="https://www.facebook.com/vrushali.saraswat" style="text-decoration:none;">
-                          <table cellpadding="0" cellspacing="0" border="0" role="presentation">
-                            <tr>
-                              <td width="40" height="40" align="center" style="border-radius:50%; border:2px solid #d4af37; background-color:#ffffff;">
-                                <img src="https://cdn-icons-png.flaticon.com/512/5968/5968764.png" width="20" height="20" style="display:block; border:0;" alt="Facebook">
-                              </td>
-                            </tr>
-                          </table>
-                        </a>
-                      </td>
-
-                      <td class="mobile-icon-container" style="padding:0 8px;">
-                        <a href="https://www.linkedin.com/in/dr-vrushalisaraswat/" style="text-decoration:none;">
-                          <table cellpadding="0" cellspacing="0" border="0" role="presentation">
-                            <tr>
-                              <td width="40" height="40" align="center" style="border-radius:50%; border:2px solid #d4af37; background-color:#ffffff;">
-                                <img src="https://cdn-icons-png.flaticon.com/512/3536/3536505.png" width="20" height="20" style="display:block; border:0;" alt="LinkedIn">
-                              </td>
-                            </tr>
-                          </table>
-                        </a>
-                      </td>
-
-                      <td class="mobile-icon-container" style="padding:0 8px;">
-                        <a href="https://www.instagram.com/happinesswithdrvrushali/" style="text-decoration:none;">
-                          <table cellpadding="0" cellspacing="0" border="0" role="presentation">
-                            <tr>
-                              <td width="40" height="40" align="center" style="border-radius:50%; border:2px solid #d4af37; background-color:#ffffff;">
-                                <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" width="20" height="20" style="display:block; border:0;" alt="Instagram">
-                              </td>
-                            </tr>
-                          </table>
-                        </a>
-                      </td>
-                    </tr>
-                  </table>
 
                 </td>
               </tr>
