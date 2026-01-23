@@ -28,7 +28,7 @@ export async function GET(req: NextRequest) {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
     const logoUrl = `${baseUrl}/logo.png`;
 
-    return new ImageResponse(
+    const imageResponse = new ImageResponse(
       (
         <div
           style={{
@@ -178,20 +178,23 @@ export async function GET(req: NextRequest) {
             />
           </div>
 
-          {/* Rosette Badge */}
+          {/* Rosette Badge Container */}
           <div
             style={{
               position: 'absolute',
               left: '5px',
               top: '90px',
               display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
+              width: '165px',
+              height: '235px',
             }}
           >
             {/* Rosette Circle */}
             <div
               style={{
+                position: 'absolute',
+                top: 0,
+                left: '10px',
                 width: '145px',
                 height: '145px',
                 background: 'linear-gradient(135deg, #C9A961 0%, #F4E4C1 25%, #D4AF37 50%, #F4E4C1 75%, #B8860B 100%)',
@@ -205,7 +208,7 @@ export async function GET(req: NextRequest) {
               style={{
                 position: 'absolute',
                 top: '90px',
-                left: '10px',
+                left: '20px',
                 width: '42px',
                 height: '100px',
                 background: 'linear-gradient(180deg, #8B0000 0%, #6B0000 100%)',
@@ -220,7 +223,7 @@ export async function GET(req: NextRequest) {
               style={{
                 position: 'absolute',
                 top: '90px',
-                right: '10px',
+                right: '20px',
                 width: '42px',
                 height: '100px',
                 background: 'linear-gradient(180deg, #8B0000 0%, #6B0000 100%)',
@@ -252,6 +255,7 @@ export async function GET(req: NextRequest) {
                 textTransform: 'uppercase',
                 fontWeight: 700,
                 marginBottom: '5px',
+                fontFamily: 'serif',
               }}
             >
               CERTIFICATE
@@ -281,6 +285,7 @@ export async function GET(req: NextRequest) {
                 fontSize: '19px',
                 color: '#555',
                 marginBottom: '15px',
+                fontFamily: 'serif',
               }}
             >
               This recognition is proudly presented to:
@@ -309,9 +314,10 @@ export async function GET(req: NextRequest) {
                 maxWidth: '780px',
                 color: '#333',
                 fontWeight: 700,
+                fontFamily: 'serif',
               }}
             >
-              has successfully completed <span style={{ color: '#8B0000' }}>The Happiness Index Assessment</span> based on The Joy Spectrum Framework and has taken a meaningful step towards greater self-awareness, emotional clarity, and well-being.
+              has successfully completed <span style={{ color: '#8B0000', fontWeight: 700 }}>The Happiness Index Assessment</span> based on The Joy Spectrum Framework and has taken a meaningful step towards greater self-awareness, emotional clarity, and well-being.
             </p>
           </div>
 
@@ -425,6 +431,60 @@ export async function GET(req: NextRequest) {
               </div>
             </div>
           </div>
+
+          {/* Corner Ornaments */}
+          <div
+            style={{
+              position: 'absolute',
+              top: '60px',
+              left: '60px',
+              width: '60px',
+              height: '60px',
+              borderTop: '2px solid #D4AF37',
+              borderLeft: '2px solid #D4AF37',
+              opacity: 0.15,
+              display: 'flex',
+            }}
+          />
+          <div
+            style={{
+              position: 'absolute',
+              top: '60px',
+              right: '60px',
+              width: '60px',
+              height: '60px',
+              borderTop: '2px solid #D4AF37',
+              borderRight: '2px solid #D4AF37',
+              opacity: 0.15,
+              display: 'flex',
+            }}
+          />
+          <div
+            style={{
+              position: 'absolute',
+              bottom: '60px',
+              left: '60px',
+              width: '60px',
+              height: '60px',
+              borderBottom: '2px solid #D4AF37',
+              borderLeft: '2px solid #D4AF37',
+              opacity: 0.15,
+              display: 'flex',
+            }}
+          />
+          <div
+            style={{
+              position: 'absolute',
+              bottom: '60px',
+              right: '60px',
+              width: '60px',
+              height: '60px',
+              borderBottom: '2px solid #D4AF37',
+              borderRight: '2px solid #D4AF37',
+              opacity: 0.15,
+              display: 'flex',
+            }}
+          />
         </div>
       ),
       {
@@ -432,6 +492,18 @@ export async function GET(req: NextRequest) {
         height: 794,
       }
     );
+
+    // Convert ImageResponse to Response with download headers
+    const response = new Response(imageResponse.body, {
+      status: 200,
+      headers: {
+        'Content-Type': 'image/png',
+        'Content-Disposition': `attachment; filename="Certificate_${name.replace(/\s+/g, '_')}.png"`,
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+      },
+    });
+
+    return response;
   } catch (error) {
     console.error('Certificate generation error:', error);
     return new Response(
