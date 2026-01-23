@@ -21,12 +21,12 @@ export async function GET(req: NextRequest) {
     const year = currentDate.getFullYear();
     const formattedDate = `${day} ${month} ${year}`;
 
-    // Fetch custom fonts
+    // Fetch custom fonts - using correct direct font URLs
     const [playfairBold, greatVibes, montserratBold, cormorantRegular] = await Promise.all([
-      fetch('https://fonts.gstatic.com/s/playfairdisplay/v36/nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKdFvUDQZNLo_U2r.woff').then(res => res.arrayBuffer()),
-      fetch('https://fonts.gstatic.com/s/greatvibes/v19/RWmMoKWR9v4ksMfaWd_JN-XCg6UKDXlq.woff').then(res => res.arrayBuffer()),
-      fetch('https://fonts.gstatic.com/s/montserrat/v26/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCtr6Ew-.woff').then(res => res.arrayBuffer()),
-      fetch('https://fonts.gstatic.com/s/cormorantgaramond/v16/co3bmX5slCNuHLi8bLeY9MK7whWMhyjQAllvuQWJ5heb_w.woff').then(res => res.arrayBuffer()),
+      fetch('https://fonts.gstatic.com/s/playfairdisplay/v36/nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKdFvUDQZNLo_U2r.woff2').then(res => res.arrayBuffer()),
+      fetch('https://fonts.gstatic.com/s/greatvibes/v19/RWmMoKWR9v4ksMfaWd_JN-XCg6UKDXlq.woff2').then(res => res.arrayBuffer()),
+      fetch('https://fonts.gstatic.com/s/montserrat/v26/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCtr6Ew-Y3tcoqK5.woff2').then(res => res.arrayBuffer()),
+      fetch('https://fonts.gstatic.com/s/cormorantgaramond/v16/co3bmX5slCNuHLi8bLeY9MK7whWMhyjQAllvuQWJ5heb_w.woff2').then(res => res.arrayBuffer()),
     ]);
 
     return new ImageResponse(
