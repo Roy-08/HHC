@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import puppeteer from "puppeteer-core";
-import chromium from "@sparticuz/chromium";
-
-export const dynamic = 'force-dynamic';
-export const maxDuration = 60;
+import chrome from "@sparticuz/chromium";
 
 export async function GET(req: NextRequest) {
   try {
@@ -39,7 +36,7 @@ export async function GET(req: NextRequest) {
   } catch (error) {
     console.error("Certificate generation error:", error);
     return NextResponse.json(
-      { error: "Failed to generate certificate", details: error instanceof Error ? error.message : String(error) },
+      { error: "Failed to generate certificate" },
       { status: 500 }
     );
   }
@@ -63,32 +60,25 @@ async function generateCertificateWithPuppeteer(
     // Launch Puppeteer with Chromium for Vercel
     const isProduction = process.env.NODE_ENV === 'production';
     
-    // Configure chromium for Vercel
-    if (isProduction) {
-      chromium.setGraphicsMode = false;
-    }
-    
     browser = await puppeteer.launch({
-      args: isProduction ? chromium.args : [
+      args: isProduction ? chrome.args : [
         '--no-sandbox',
         '--disable-setuid-sandbox',
         '--disable-dev-shm-usage',
-        '--disable-gpu',
-        '--disable-web-security',
-        '--disable-features=IsolateOrigins,site-per-process'
+        '--disable-gpu'
       ],
       defaultViewport: {
         width: 1123,
         height: 794
       },
       executablePath: isProduction 
-        ? await chromium.executablePath()
+        ? await chrome.executablePath()
         : process.platform === 'win32'
         ? 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
         : process.platform === 'darwin'
         ? '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
         : '/usr/bin/google-chrome',
-      headless: chromium.headless || true,
+      headless: true,
     });
 
     const page = await browser.newPage();
