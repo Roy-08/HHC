@@ -35,12 +35,8 @@ export async function GET(req: NextRequest) {
             width: '1123px',
             height: '794px',
             display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
             background: 'linear-gradient(to bottom, #ffffff 0%, #fefefe 50%, #fcfcfc 100%)',
             position: 'relative',
-            fontFamily: 'system-ui',
           }}
         >
           {/* Main Border Frame */}
@@ -53,6 +49,7 @@ export async function GET(req: NextRequest) {
               bottom: '30px',
               border: '3px solid #D4AF37',
               display: 'flex',
+              boxShadow: 'inset 0 0 0 1px rgba(244, 228, 193, 0.5)',
             }}
           />
           
@@ -80,7 +77,6 @@ export async function GET(req: NextRequest) {
               height: '200px',
               background: 'linear-gradient(135deg, #C9A961 0%, #F4E4C1 25%, #D4AF37 50%, #F4E4C1 75%, #B8860B 100%)',
               clipPath: 'polygon(0 0, 100% 0, 0 100%)',
-              opacity: 0.95,
               display: 'flex',
             }}
           />
@@ -109,7 +105,6 @@ export async function GET(req: NextRequest) {
               height: '150px',
               background: 'linear-gradient(135deg, #C9A961 0%, #F4E4C1 25%, #D4AF37 50%, #F4E4C1 75%, #B8860B 100%)',
               clipPath: 'polygon(100% 0, 100% 100%, 0 100%)',
-              opacity: 0.95,
               display: 'flex',
             }}
           />
@@ -159,12 +154,10 @@ export async function GET(req: NextRequest) {
           <div
             style={{
               position: 'absolute',
-              top: '50px',
+              top: '45px',
               left: '50%',
               transform: 'translateX(-50%)',
               display: 'flex',
-              width: '160px',
-              height: '80px',
               alignItems: 'center',
               justifyContent: 'center',
             }}
@@ -172,49 +165,47 @@ export async function GET(req: NextRequest) {
             <img
               src={logoUrl}
               alt="Logo"
-              width="160"
-              height="80"
+              width="140"
+              height="70"
               style={{ objectFit: 'contain' }}
             />
           </div>
 
-          {/* Rosette Badge Container */}
+          {/* Rosette Badge - Left Side */}
           <div
             style={{
               position: 'absolute',
-              left: '5px',
-              top: '90px',
+              left: '25px',
+              top: '120px',
               display: 'flex',
-              width: '165px',
-              height: '235px',
+              flexDirection: 'column',
+              alignItems: 'center',
             }}
           >
             {/* Rosette Circle */}
             <div
               style={{
-                position: 'absolute',
-                top: 0,
-                left: '10px',
-                width: '145px',
-                height: '145px',
+                width: '120px',
+                height: '120px',
                 background: 'linear-gradient(135deg, #C9A961 0%, #F4E4C1 25%, #D4AF37 50%, #F4E4C1 75%, #B8860B 100%)',
                 borderRadius: '50%',
-                border: '5px solid #B8860B',
+                border: '4px solid #B8860B',
                 display: 'flex',
+                position: 'relative',
               }}
             />
             {/* Left Ribbon */}
             <div
               style={{
                 position: 'absolute',
-                top: '90px',
-                left: '20px',
-                width: '42px',
-                height: '100px',
+                top: '75px',
+                left: '15px',
+                width: '35px',
+                height: '85px',
                 background: 'linear-gradient(180deg, #8B0000 0%, #6B0000 100%)',
-                clipPath: 'polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%)',
+                clipPath: 'polygon(0 0, 100% 0, 100% 100%, 50% 85%, 0 100%)',
                 border: '2px solid #D4AF37',
-                transform: 'rotate(15deg)',
+                transform: 'rotate(12deg)',
                 display: 'flex',
               }}
             />
@@ -222,56 +213,55 @@ export async function GET(req: NextRequest) {
             <div
               style={{
                 position: 'absolute',
-                top: '90px',
-                right: '20px',
-                width: '42px',
-                height: '100px',
+                top: '75px',
+                right: '15px',
+                width: '35px',
+                height: '85px',
                 background: 'linear-gradient(180deg, #8B0000 0%, #6B0000 100%)',
-                clipPath: 'polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%)',
+                clipPath: 'polygon(0 0, 100% 0, 100% 100%, 50% 85%, 0 100%)',
                 border: '2px solid #D4AF37',
-                transform: 'rotate(-15deg)',
+                transform: 'rotate(-12deg)',
                 display: 'flex',
               }}
             />
           </div>
 
-          {/* Main Content */}
+          {/* Main Content Container */}
           <div
             style={{
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              textAlign: 'center',
-              width: '82%',
-              marginTop: '140px',
+              width: '100%',
+              paddingTop: '135px',
             }}
           >
             {/* Certificate Title */}
-            <h1
+            <div
               style={{
-                fontSize: '88px',
-                letterSpacing: '18px',
+                fontSize: '82px',
+                letterSpacing: '16px',
                 color: '#1a1a1a',
-                textTransform: 'uppercase',
                 fontWeight: 700,
-                marginBottom: '5px',
+                marginBottom: '8px',
                 fontFamily: 'serif',
+                display: 'flex',
               }}
             >
               CERTIFICATE
-            </h1>
+            </div>
 
             {/* Of Participation Badge */}
             <div
               style={{
-                fontSize: '26px',
+                fontSize: '24px',
                 color: '#ffffff',
                 background: '#8B0000',
-                letterSpacing: '12px',
+                letterSpacing: '10px',
                 fontWeight: 700,
-                marginBottom: '30px',
-                padding: '12px 40px',
+                padding: '10px 50px',
                 border: '3px solid #D4AF37',
+                marginBottom: '35px',
                 display: 'flex',
               }}
             >
@@ -279,79 +269,97 @@ export async function GET(req: NextRequest) {
             </div>
 
             {/* Intro Text */}
-            <p
-              style={{
-                fontStyle: 'italic',
-                fontSize: '19px',
-                color: '#555',
-                marginBottom: '15px',
-                fontFamily: 'serif',
-              }}
-            >
-              This recognition is proudly presented to:
-            </p>
-
-            {/* Name */}
             <div
               style={{
-                fontSize: '70px',
-                color: '#000',
-                borderBottom: '3px solid #D4AF37',
-                padding: '0 70px 10px',
-                margin: '10px 0 25px 0',
-                fontFamily: 'cursive',
+                fontSize: '18px',
+                color: '#555',
+                marginBottom: '18px',
+                fontFamily: 'serif',
+                fontStyle: 'italic',
                 display: 'flex',
               }}
             >
-              {name}
+              This recognition is proudly presented to:
             </div>
 
-            {/* Description */}
-            <p
+            {/* Name with Underline */}
+            <div
               style={{
-                fontSize: '18px',
-                lineHeight: 1.8,
-                maxWidth: '780px',
-                color: '#333',
-                fontWeight: 700,
-                fontFamily: 'serif',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                marginBottom: '28px',
               }}
             >
-              has successfully completed <span style={{ color: '#8B0000', fontWeight: 700 }}>The Happiness Index Assessment</span> based on The Joy Spectrum Framework and has taken a meaningful step towards greater self-awareness, emotional clarity, and well-being.
-            </p>
+              <div
+                style={{
+                  fontSize: '64px',
+                  color: '#000',
+                  fontFamily: 'cursive',
+                  paddingBottom: '8px',
+                  display: 'flex',
+                }}
+              >
+                {name}
+              </div>
+              <div
+                style={{
+                  width: '450px',
+                  height: '3px',
+                  background: '#D4AF37',
+                  display: 'flex',
+                }}
+              />
+            </div>
+
+            {/* Description Text */}
+            <div
+              style={{
+                fontSize: '17px',
+                lineHeight: 1.7,
+                width: '750px',
+                color: '#333',
+                textAlign: 'center',
+                fontFamily: 'serif',
+                display: 'flex',
+                flexWrap: 'wrap',
+                justifyContent: 'center',
+              }}
+            >
+              <span style={{ display: 'flex' }}>has successfully completed </span>
+              <span style={{ color: '#8B0000', fontWeight: 700, display: 'flex', margin: '0 5px' }}>The Happiness Index Assessment</span>
+              <span style={{ display: 'flex' }}> based on The Joy Spectrum Framework and has taken a meaningful step towards greater self-awareness, emotional clarity, and well-being.</span>
+            </div>
           </div>
 
-          {/* Footer */}
+          {/* Footer - Date and Signature */}
           <div
             style={{
               position: 'absolute',
-              bottom: '55px',
-              width: '100%',
+              bottom: '50px',
+              left: '120px',
+              right: '120px',
               display: 'flex',
               justifyContent: 'space-between',
-              padding: '0 150px',
-              alignItems: 'center',
+              alignItems: 'flex-end',
             }}
           >
             {/* Date Section */}
             <div
               style={{
-                width: '340px',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
+                width: '280px',
               }}
             >
               <div
                 style={{
                   fontFamily: 'cursive',
-                  fontSize: '45px',
+                  fontSize: '40px',
                   color: '#000',
-                  marginBottom: '-8px',
-                  height: '65px',
+                  marginBottom: '5px',
                   display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
                 }}
               >
                 {formattedDate}
@@ -359,18 +367,19 @@ export async function GET(req: NextRequest) {
               <div
                 style={{
                   width: '100%',
-                  borderTop: '2px solid #2a2a2a',
-                  marginBottom: '12px',
+                  height: '2px',
+                  background: '#2a2a2a',
+                  marginBottom: '10px',
                   display: 'flex',
                 }}
               />
               <div
                 style={{
-                  fontSize: '13px',
+                  fontSize: '12px',
                   fontWeight: 700,
                   color: '#8B0000',
                   letterSpacing: '1.5px',
-                  textTransform: 'uppercase',
+                  display: 'flex',
                 }}
               >
                 DATE OF ISSUANCE
@@ -380,22 +389,19 @@ export async function GET(req: NextRequest) {
             {/* Signature Section */}
             <div
               style={{
-                width: '340px',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
+                width: '280px',
               }}
             >
               <div
                 style={{
                   fontFamily: 'cursive',
-                  fontSize: '45px',
+                  fontSize: '40px',
                   color: '#000',
-                  marginBottom: '-8px',
-                  height: '65px',
+                  marginBottom: '5px',
                   display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
                 }}
               >
                 Dr. Vrushali
@@ -403,28 +409,30 @@ export async function GET(req: NextRequest) {
               <div
                 style={{
                   width: '100%',
-                  borderTop: '2px solid #2a2a2a',
-                  marginBottom: '12px',
+                  height: '2px',
+                  background: '#2a2a2a',
+                  marginBottom: '10px',
                   display: 'flex',
                 }}
               />
               <div
                 style={{
-                  fontSize: '13px',
+                  fontSize: '12px',
                   fontWeight: 700,
                   color: '#8B0000',
                   letterSpacing: '1.5px',
-                  textTransform: 'uppercase',
+                  marginBottom: '5px',
+                  display: 'flex',
                 }}
               >
                 DR. VRUSHALI SARASWAT
               </div>
               <div
                 style={{
-                  fontSize: '12px',
+                  fontSize: '11px',
                   color: '#666',
-                  marginTop: '5px',
                   fontStyle: 'italic',
+                  display: 'flex',
                 }}
               >
                 Holistic Happiness Coach
@@ -436,52 +444,52 @@ export async function GET(req: NextRequest) {
           <div
             style={{
               position: 'absolute',
-              top: '60px',
-              left: '60px',
-              width: '60px',
-              height: '60px',
+              top: '55px',
+              left: '55px',
+              width: '50px',
+              height: '50px',
               borderTop: '2px solid #D4AF37',
               borderLeft: '2px solid #D4AF37',
-              opacity: 0.15,
+              opacity: 0.2,
               display: 'flex',
             }}
           />
           <div
             style={{
               position: 'absolute',
-              top: '60px',
-              right: '60px',
-              width: '60px',
-              height: '60px',
+              top: '55px',
+              right: '55px',
+              width: '50px',
+              height: '50px',
               borderTop: '2px solid #D4AF37',
               borderRight: '2px solid #D4AF37',
-              opacity: 0.15,
+              opacity: 0.2,
               display: 'flex',
             }}
           />
           <div
             style={{
               position: 'absolute',
-              bottom: '60px',
-              left: '60px',
-              width: '60px',
-              height: '60px',
+              bottom: '55px',
+              left: '55px',
+              width: '50px',
+              height: '50px',
               borderBottom: '2px solid #D4AF37',
               borderLeft: '2px solid #D4AF37',
-              opacity: 0.15,
+              opacity: 0.2,
               display: 'flex',
             }}
           />
           <div
             style={{
               position: 'absolute',
-              bottom: '60px',
-              right: '60px',
-              width: '60px',
-              height: '60px',
+              bottom: '55px',
+              right: '55px',
+              width: '50px',
+              height: '50px',
               borderBottom: '2px solid #D4AF37',
               borderRight: '2px solid #D4AF37',
-              opacity: 0.15,
+              opacity: 0.2,
               display: 'flex',
             }}
           />
