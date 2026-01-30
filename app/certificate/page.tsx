@@ -152,7 +152,7 @@ export default function CertificatePage() {
 <div 
   className="absolute left-0 right-0 flex items-center justify-center"
   style={{ 
-    top: "40%",  // Adjust this value to position the name correctly
+    top: "40.5%",  // Adjust this value to position the name correctly
     transform: "translateY(-50%)"
   }}
 >            <div className="text-center px-4 sm:px-8 w-full">
@@ -310,6 +310,7 @@ export default function CertificatePage() {
   );
 
 }
+
 
 
 
