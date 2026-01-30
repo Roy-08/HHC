@@ -227,78 +227,60 @@ export default function CertificatePage() {
               }}
             ></div>
 
-            <div className="text-center relative z-10">
-              <h2 
-                className="text-5xl sm:text-6xl font-bold mb-6"
-                style={{ 
-                  color: "rgb(222, 15, 63)",
-                  fontFamily: "'Playfair Display', serif",
-                  letterSpacing: "-0.02em"
-                }}
-              >
-                Congratulations!
-              </h2>
-              
-              <p 
-                className="text-3xl sm:text-4xl font-bold mb-8"
-                style={{ 
-                  color: "rgb(31, 41, 55)",
-                  fontFamily: "'Dancing Script', cursive"
-                }}
-              >
-                {name}
-              </p>
-              
-              <div 
-                className="w-24 h-1 mx-auto mb-8 rounded-full"
-                style={{ backgroundColor: "rgb(222, 15, 63)" }}
-              ></div>
+            <div className="text-center relative z-10 px-4 sm:px-0">
+  <h2 
+    className="text-3xl sm:text-5xl md:text-6xl font-bold mb-4 sm:mb-6 text-center"
+    style={{ 
+      color: "rgb(222, 15, 63)",
+      fontFamily: "'Playfair Display', serif",
+      letterSpacing: "-0.02em"
+    }}
+  >
+    Congratulations!
+  </h2>
+  
+  <p 
+    className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 sm:mb-8 text-center break-words"
+    style={{ 
+      color: "rgb(31, 41, 55)",
+      fontFamily: "'Dancing Script', cursive",
+      wordBreak: "break-word",
+      overflowWrap: "break-word"
+    }}
+  >
+    {name}
+  </p>
+  
+  <div 
+    className="w-16 sm:w-24 h-1 mx-auto mb-6 sm:mb-8 rounded-full"
+    style={{ backgroundColor: "rgb(222, 15, 63)" }}
+  ></div>
 
-              <p 
-                className="text-lg mb-10"
-                style={{ 
-                  color: "rgb(107, 114, 128)",
-                  lineHeight: "1.8"
-                }}
-              >
-                Your certificate has been downloaded successfully.<br />
-                Share your achievement with the world!
-              </p>
+  <p 
+    className="text-base sm:text-lg mb-8 sm:mb-10 text-center px-2"
+    style={{ 
+      color: "rgb(107, 114, 128)",
+      lineHeight: "1.8"
+    }}
+  >
+    Your certificate has been downloaded successfully.<br />
+    Share your achievement with the world!
+  </p>
 
-              <div className="space-y-4">
-                <div className="flex flex-wrap justify-center gap-3 mb-8">
-                  <button 
-                    className="px-6 py-3 rounded-lg font-semibold text-white transition-all duration-200 hover:opacity-90 hover:shadow-lg"
-                    style={{ backgroundColor: "rgb(14, 165, 233)" }}
-                  >
-                    Share on LinkedIn
-                  </button>
-                  <button 
-                    className="px-6 py-3 rounded-lg font-semibold text-white transition-all duration-200 hover:opacity-90 hover:shadow-lg"
-                    style={{ backgroundColor: "rgb(29, 161, 242)" }}
-                  >
-                    Share on Twitter
-                  </button>
-                  <button 
-                    className="px-6 py-3 rounded-lg font-semibold text-white transition-all duration-200 hover:opacity-90 hover:shadow-lg"
-                    style={{ backgroundColor: "rgb(24, 119, 242)" }}
-                  >
-                    Share on Facebook
-                  </button>
-                </div>
+  <div className="space-y-4 w-full">
+    <button
+      onClick={() => setShowSuccessModal(false)}
+      className="w-full py-3 sm:py-4 rounded-lg font-semibold text-white transition-all duration-200 hover:opacity-90 text-sm sm:text-base"
+      style={{
+        backgroundColor: "rgb(222, 15, 63)",
+        boxShadow: "0 4px 6px -1px rgba(222, 15, 63, 0.3)"
+      }}
+    >
+      Close
+    </button>
+  </div>
+</div>
 
-                <button
-                  onClick={() => setShowSuccessModal(false)}
-                  className="w-full py-4 rounded-lg font-semibold text-white transition-all duration-200 hover:opacity-90"
-                  style={{
-                    backgroundColor: "rgb(222, 15, 63)",
-                    boxShadow: "0 4px 6px -1px rgba(222, 15, 63, 0.3)"
-                  }}
-                >
-                  Close
-                </button>
-              </div>
-            </div>
           </div>
         </div>
       )}
@@ -310,6 +292,7 @@ export default function CertificatePage() {
   );
 
 }
+
 
 
 
