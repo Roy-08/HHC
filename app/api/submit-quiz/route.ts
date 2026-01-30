@@ -3,7 +3,7 @@ import { google } from "googleapis";
 
 export async function POST(req: Request) {
   try {
-    const { name, email, mobile, dob, gender, country, occupation, totalScore, answers } = await req.json();
+    const { name, email, mobile, dob, gender, country, occupation, totalScore, answers, language } = await req.json();
 
     if (!email || !name) {
       return NextResponse.json({ error: "Name and email are required" }, { status: 400 });
@@ -33,7 +33,8 @@ export async function POST(req: Request) {
         occupation,
         totalScore,
         category,
-        mailStatus
+        mailStatus,
+        language: language || 'english'
       });
     } catch (sheetError) {
       console.error("Google Sheets save failed:", sheetError);
@@ -162,6 +163,7 @@ async function saveToGoogleSheets(data: {
   totalScore: number;
   category: string;
   mailStatus: string;
+  language: string;
 }) {
   try {
     const auth = new google.auth.GoogleAuth({
@@ -175,7 +177,7 @@ async function saveToGoogleSheets(data: {
     const sheets = google.sheets({ version: "v4", auth });
 
     const spreadsheetId = process.env.GOOGLE_SHEET_ID;
-    const range = "Test_Data!A:J";
+    const range = "Test_Data!A:K";
 
     await sheets.spreadsheets.values.append({
       spreadsheetId,
@@ -194,6 +196,7 @@ async function saveToGoogleSheets(data: {
             data.totalScore,
             data.category,
             data.mailStatus,
+            data.language,
           ],
         ],
       },
@@ -273,20 +276,14 @@ function generateHTMLEmail(
         word-wrap: break-word !important;
       }
       .mobile-button {
-        padding: 10px 18px !important;
+        padding: 10px 16px !important;
         font-size: 12px !important;
       }
       .social-icon-cell {
         padding: 0 8px !important;
       }
       .button-cell {
-        display: block !important;
-        width: 100% !important;
-        padding: 8px 0 !important;
-        text-align: center !important;
-      }
-      .button-table {
-        margin: 0 auto !important;
+        padding: 0 4px !important;
       }
     }
   </style>
@@ -393,20 +390,20 @@ function generateHTMLEmail(
               If you found this meaningful, we encourage you to share the Happiness Index with people you care about - a small step that can make a real difference.
             </p>
 
-            <!-- Two Buttons - Stack on Mobile, Side by Side on Desktop -->
+            <!-- Two Buttons Side by Side -->
             <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation" style="margin:12px 0 25px 0;">
               <tr>
                 <td align="center">
                   <table cellpadding="0" cellspacing="0" border="0" role="presentation">
                     <tr>
                       <!-- View Report Button -->
-                      <td class="button-cell" align="center" style="padding:0 8px;">
-                        <table class="button-table" cellpadding="0" cellspacing="0" border="0" role="presentation" style="margin:0 auto;">
+                      <td class="button-cell" align="center" style="padding:0 6px;">
+                        <table cellpadding="0" cellspacing="0" border="0" role="presentation">
                           <tr>
                             <td align="center" style="border-radius:25px; background:linear-gradient(135deg, #1b6b36, #2d8a4d);">
                               <a href="${pdfUrl}" target="_blank" class="mobile-button" style="
                                 display:inline-block;
-                                padding:12px 24px;
+                                padding:12px 20px;
                                 font-family:Arial, Helvetica, sans-serif;
                                 font-size:14px;
                                 font-weight:600;
@@ -424,17 +421,17 @@ function generateHTMLEmail(
                       </td>
 
                       <!-- Download Certificate Button -->
-                      <td class="button-cell" align="center" style="padding:0 8px;">
-                        <table class="button-table" cellpadding="0" cellspacing="0" border="0" role="presentation" style="margin:0 auto;">
+                      <td class="button-cell" align="center" style="padding:0 6px;">
+                        <table cellpadding="0" cellspacing="0" border="0" role="presentation">
                           <tr>
                             <td align="center" style="border-radius:25px; background:linear-gradient(135deg, #d4af37, #f4c542);">
                               <a href="${certificateUrl}" target="_blank" class="mobile-button" style="
                                 display:inline-block;
-                                padding:12px 24px;
+                                padding:12px 20px;
                                 font-family:Arial, Helvetica, sans-serif;
                                 font-size:14px;
                                 font-weight:600;
-                                color:#2b4d36;
+                                color:#ffffff;
                                 text-decoration:none;
                                 border-radius:25px;
                                 letter-spacing:0.3px;
