@@ -282,7 +282,11 @@ function generateHTMLEmail(
       .button-cell {
         display: block !important;
         width: 100% !important;
-        padding: 5px 0 !important;
+        padding: 8px 0 !important;
+        text-align: center !important;
+      }
+      .button-table {
+        margin: 0 auto !important;
       }
     }
   </style>
@@ -389,15 +393,15 @@ function generateHTMLEmail(
               If you found this meaningful, we encourage you to share the Happiness Index with people you care about - a small step that can make a real difference.
             </p>
 
-            <!-- Two Buttons Side by Side - Centered -->
+            <!-- Two Buttons - Stack on Mobile, Side by Side on Desktop -->
             <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation" style="margin:12px 0 25px 0;">
               <tr>
                 <td align="center">
-                  <table cellpadding="0" cellspacing="0" border="0" role="presentation" style="display:inline-block;">
+                  <table cellpadding="0" cellspacing="0" border="0" role="presentation">
                     <tr>
                       <!-- View Report Button -->
-                      <td class="button-cell" style="padding:0 8px;">
-                        <table cellpadding="0" cellspacing="0" border="0" role="presentation">
+                      <td class="button-cell" align="center" style="padding:0 8px;">
+                        <table class="button-table" cellpadding="0" cellspacing="0" border="0" role="presentation" style="margin:0 auto;">
                           <tr>
                             <td align="center" style="border-radius:25px; background:linear-gradient(135deg, #1b6b36, #2d8a4d);">
                               <a href="${pdfUrl}" target="_blank" class="mobile-button" style="
@@ -420,8 +424,8 @@ function generateHTMLEmail(
                       </td>
 
                       <!-- Download Certificate Button -->
-                      <td class="button-cell" style="padding:0 8px;">
-                        <table cellpadding="0" cellspacing="0" border="0" role="presentation">
+                      <td class="button-cell" align="center" style="padding:0 8px;">
+                        <table class="button-table" cellpadding="0" cellspacing="0" border="0" role="presentation" style="margin:0 auto;">
                           <tr>
                             <td align="center" style="border-radius:25px; background:linear-gradient(135deg, #d4af37, #f4c542);">
                               <a href="${certificateUrl}" target="_blank" class="mobile-button" style="
