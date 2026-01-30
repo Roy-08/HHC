@@ -145,6 +145,11 @@ export default function CertificatePage() {
             src="certificate.png"
             alt="Certificate Background"
             className="absolute inset-0 w-full h-full object-fill"
+            style={{ 
+    top: "-10%",  // Negative value moves image UP
+    left: "0",
+    objectFit: "fill"
+  }}
             crossOrigin="anonymous"
           />
 
@@ -309,6 +314,7 @@ export default function CertificatePage() {
   );
 
 }
+
 
 
 
