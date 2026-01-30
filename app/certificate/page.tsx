@@ -146,7 +146,7 @@ export default function CertificatePage() {
             alt="Certificate Background"
             className="absolute inset-0 w-full h-full object-fill"
             style={{ 
-    top: "-10%",  // Negative value moves image UP
+    top: "-5%",  // Negative value moves image UP
     left: "0",
     objectFit: "fill"
   }}
@@ -314,6 +314,7 @@ export default function CertificatePage() {
   );
 
 }
+
 
 
 
