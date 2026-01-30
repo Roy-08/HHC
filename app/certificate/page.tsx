@@ -195,9 +195,7 @@ export default function CertificatePage() {
             )}
           </button>
 
-          <p className="text-sm mt-4" style={{ color: "rgb(107, 114, 128)" }}>
-            Right-click on the certificate to save directly
-          </p>
+          
         </div>
       </div>
 
@@ -292,6 +290,7 @@ export default function CertificatePage() {
   );
 
 }
+
 
 
 
