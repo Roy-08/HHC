@@ -24,98 +24,44 @@ export default function CertificateContent() {
         throw new Error("Certificate element not found");
       }
 
-      // Create a completely isolated clone
-      const clonedElement = certificateElement.cloneNode(true) as HTMLElement;
-      clonedElement.style.position = "absolute";
-      clonedElement.style.left = "-9999px";
-      clonedElement.style.top = "0";
-      clonedElement.style.width = certificateElement.offsetWidth + "px";
-      clonedElement.style.height = certificateElement.offsetHeight + "px";
-      
-      // Force all colors to explicit RGB values
-      clonedElement.style.backgroundColor = "rgb(255, 255, 255)";
-      clonedElement.style.color = "rgb(31, 41, 55)";
-      
-      document.body.appendChild(clonedElement);
-
-      // Aggressively convert all computed styles to inline RGB
-      const allElements = clonedElement.querySelectorAll("*");
-      allElements.forEach((el) => {
-        const htmlEl = el as HTMLElement;
-        const computedStyle = window.getComputedStyle(htmlEl);
-        
-        // Convert background color
-        const bgColor = computedStyle.backgroundColor;
-        if (bgColor && bgColor !== 'rgba(0, 0, 0, 0)' && bgColor !== 'transparent') {
-          const rgb = bgColor.match(/\d+/g);
-          if (rgb && rgb.length >= 3) {
-            htmlEl.style.backgroundColor = `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`;
-          } else {
-            htmlEl.style.backgroundColor = "rgb(255, 255, 255)";
-          }
-        }
-        
-        // Convert text color
-        const textColor = computedStyle.color;
-        if (textColor) {
-          const rgb = textColor.match(/\d+/g);
-          if (rgb && rgb.length >= 3) {
-            htmlEl.style.color = `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`;
-          } else {
-            htmlEl.style.color = "rgb(31, 41, 55)";
-          }
-        }
-        
-        // Convert border color
-        const borderColor = computedStyle.borderColor;
-        if (borderColor) {
-          const rgb = borderColor.match(/\d+/g);
-          if (rgb && rgb.length >= 3) {
-            htmlEl.style.borderColor = `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`;
-          }
-        }
-        
-        // Remove all CSS custom properties and variables
-        htmlEl.style.removeProperty("color-scheme");
-        htmlEl.style.removeProperty("--tw-bg-opacity");
-        htmlEl.style.removeProperty("--tw-text-opacity");
-        htmlEl.style.removeProperty("--tw-border-opacity");
-        
-        // Remove any class that might reference CSS variables
-        const classes = Array.from(htmlEl.classList);
-        classes.forEach(cls => {
-          if (cls.includes('dark:') || cls.includes('bg-') || cls.includes('text-')) {
-            htmlEl.classList.remove(cls);
-          }
-        });
-      });
-
+      // Import html2canvas
       const html2canvas = (await import("html2canvas")).default;
       
-      const canvas = await html2canvas(clonedElement, {
+      // Create canvas with explicit settings to avoid lab() colors
+      const canvas = await html2canvas(certificateElement, {
         scale: 2,
         backgroundColor: "#ffffff",
         logging: false,
         useCORS: true,
         allowTaint: true,
         imageTimeout: 0,
-        foreignObjectRendering: false,
+        removeContainer: true,
         onclone: (clonedDoc) => {
-          // Final pass to ensure no lab() colors
-          const body = clonedDoc.body;
-          const allEls = body.querySelectorAll("*");
-          allEls.forEach((el) => {
+          // Force all elements to use RGB colors only
+          const allElements = clonedDoc.querySelectorAll("*");
+          allElements.forEach((el: Element) => {
             const htmlEl = el as HTMLElement;
             
-            // Force white background if any lab() detected
-            if (htmlEl.style.backgroundColor && htmlEl.style.backgroundColor.includes('lab')) {
+            // Remove all Tailwind classes that might use lab() colors
+            const classes = Array.from(htmlEl.classList);
+            classes.forEach(cls => {
+              if (cls.startsWith('bg-') || cls.startsWith('text-') || cls.startsWith('border-')) {
+                htmlEl.classList.remove(cls);
+              }
+            });
+            
+            // Force inline RGB styles
+            const computedStyle = window.getComputedStyle(htmlEl);
+            
+            if (computedStyle.backgroundColor && computedStyle.backgroundColor !== 'rgba(0, 0, 0, 0)') {
               htmlEl.style.backgroundColor = '#ffffff';
             }
-            if (htmlEl.style.color && htmlEl.style.color.includes('lab')) {
+            
+            if (computedStyle.color) {
               htmlEl.style.color = '#1f2937';
             }
             
-            // Remove all CSS variables
+            // Remove CSS variables
             htmlEl.style.removeProperty("color-scheme");
             const styleProps = Array.from(htmlEl.style);
             styleProps.forEach(prop => {
@@ -127,8 +73,7 @@ export default function CertificateContent() {
         }
       });
 
-      document.body.removeChild(clonedElement);
-
+      // Convert canvas to blob and download
       canvas.toBlob((blob) => {
         if (!blob) {
           throw new Error("Failed to create image");
@@ -155,17 +100,26 @@ export default function CertificateContent() {
       
     } catch (error) {
       console.error("Download error:", error);
-      alert("Failed to download certificate. Please try again or right-click on the certificate to save it.");
+      alert("Failed to download certificate. Please try again.");
       setIsDownloading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-8" style={{ backgroundColor: "#ffffff" }}>
+    <div 
+      className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-8"
+      style={{ backgroundColor: "#ffffff" }}
+    >
       <div className="max-w-4xl w-full">
         {/* Header */}
         <div className="text-center mb-8 sm:mb-12">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4" style={{ color: "#de0f3f", fontFamily: "'Playfair Display', serif" }}>
+          <h1 
+            className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4"
+            style={{ 
+              color: "#de0f3f",
+              fontFamily: "'Playfair Display', serif"
+            }}
+          >
             Congratulations, <span style={{ fontFamily: "'Dancing Script', cursive" }}>{name}</span>!
           </h1>
         </div>
@@ -179,11 +133,11 @@ export default function CertificateContent() {
           style={{
             aspectRatio: "1.414/1",
             backgroundColor: "#ffffff",
-            boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)"
+            boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)"
           }}
         >
           <img
-            src="/images/photo1770121135.jpg"
+            src="/images/photo1770121784.jpg"
             alt="Certificate Background"
             className="absolute inset-0 w-full h-full object-fill"
             crossOrigin="anonymous"
@@ -217,10 +171,11 @@ export default function CertificateContent() {
           <button
             onClick={handleDownload}
             disabled={isDownloading}
-            className="text-white font-semibold py-4 px-12 rounded-lg transition-all duration-200 text-lg disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-90"
+            className="font-semibold py-4 px-12 rounded-lg transition-all duration-200 text-lg disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-90"
             style={{
               backgroundColor: isDownloading ? "#9ca3af" : "#de0f3f",
-              boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)"
+              color: "#ffffff",
+              boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)"
             }}
           >
             {isDownloading ? (
@@ -278,9 +233,7 @@ export default function CertificateContent() {
                 className="text-2xl sm:text-3xl font-bold mb-6 break-words"
                 style={{ 
                   color: "#1f2937",
-                  fontFamily: "'Dancing Script', cursive",
-                  wordBreak: "break-word",
-                  overflowWrap: "break-word"
+                  fontFamily: "'Dancing Script', cursive"
                 }}
               >
                 {name}
@@ -301,9 +254,10 @@ export default function CertificateContent() {
 
               <button
                 onClick={() => setShowSuccessModal(false)}
-                className="w-full py-3 sm:py-4 rounded-lg font-semibold text-white transition-all hover:opacity-90"
+                className="w-full py-3 sm:py-4 rounded-lg font-semibold transition-all hover:opacity-90"
                 style={{
                   backgroundColor: "#de0f3f",
+                  color: "#ffffff",
                   boxShadow: "0 4px 6px -1px rgba(222, 15, 63, 0.3)"
                 }}
               >
