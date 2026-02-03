@@ -3,7 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export default function CertificatePage() {
+export default function CertificateContent() {
   const searchParams = useSearchParams();
   const name = searchParams.get("name") || "Participant";
   const date = searchParams.get("date") || new Date().toLocaleDateString("en-GB", {
@@ -142,20 +142,21 @@ export default function CertificatePage() {
           }}
         >
           <img
-            src="certificate.png"
+            src="/images/Certificate.jpg"
             alt="Certificate Background"
             className="absolute inset-0 w-full h-full object-fill"
             
             crossOrigin="anonymous"
           />
 
-<div 
-  className="absolute left-0 right-0 flex items-center justify-center"
-  style={{ 
-    top: "40.5%",  // Adjust this value to position the name correctly
-    transform: "translateY(-50%)"
-  }}
->            <div className="text-center px-4 sm:px-8 w-full">
+          <div 
+            className="absolute left-0 right-0 flex items-center justify-center"
+            style={{ 
+              top: "40.5%",
+              transform: "translateY(-50%)"
+            }}
+          >
+            <div className="text-center px-4 sm:px-8 w-full">
               <p
                 className="font-serif font-bold text-xl sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl break-words leading-tight"
                 style={{
@@ -194,8 +195,6 @@ export default function CertificatePage() {
               "Download Certificate"
             )}
           </button>
-
-          
         </div>
       </div>
 
@@ -226,59 +225,58 @@ export default function CertificatePage() {
             ></div>
 
             <div className="text-center relative z-10 px-4 sm:px-0">
-  <h2 
-    className="text-3xl sm:text-5xl md:text-6xl font-bold mb-4 sm:mb-6 text-center"
-    style={{ 
-      color: "rgb(222, 15, 63)",
-      fontFamily: "'Playfair Display', serif",
-      letterSpacing: "-0.02em"
-    }}
-  >
-    Congratulations!
-  </h2>
-  
-  <p 
-    className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 sm:mb-8 text-center break-words"
-    style={{ 
-      color: "rgb(31, 41, 55)",
-      fontFamily: "'Dancing Script', cursive",
-      wordBreak: "break-word",
-      overflowWrap: "break-word"
-    }}
-  >
-    {name}
-  </p>
-  
-  <div 
-    className="w-16 sm:w-24 h-1 mx-auto mb-6 sm:mb-8 rounded-full"
-    style={{ backgroundColor: "rgb(222, 15, 63)" }}
-  ></div>
+              <h2 
+                className="text-3xl sm:text-5xl md:text-6xl font-bold mb-4 sm:mb-6 text-center"
+                style={{ 
+                  color: "rgb(222, 15, 63)",
+                  fontFamily: "'Playfair Display', serif",
+                  letterSpacing: "-0.02em"
+                }}
+              >
+                Congratulations!
+              </h2>
+              
+              <p 
+                className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 sm:mb-8 text-center break-words"
+                style={{ 
+                  color: "rgb(31, 41, 55)",
+                  fontFamily: "'Dancing Script', cursive",
+                  wordBreak: "break-word",
+                  overflowWrap: "break-word"
+                }}
+              >
+                {name}
+              </p>
+              
+              <div 
+                className="w-16 sm:w-24 h-1 mx-auto mb-6 sm:mb-8 rounded-full"
+                style={{ backgroundColor: "rgb(222, 15, 63)" }}
+              ></div>
 
-  <p 
-    className="text-base sm:text-lg mb-8 sm:mb-10 text-center px-2"
-    style={{ 
-      color: "rgb(107, 114, 128)",
-      lineHeight: "1.8"
-    }}
-  >
-    Your certificate has been downloaded successfully.<br />
-    Share your achievement with the world!
-  </p>
+              <p 
+                className="text-base sm:text-lg mb-8 sm:mb-10 text-center px-2"
+                style={{ 
+                  color: "rgb(107, 114, 128)",
+                  lineHeight: "1.8"
+                }}
+              >
+                Your certificate has been downloaded successfully.<br />
+                Share your achievement with the world!
+              </p>
 
-  <div className="space-y-4 w-full">
-    <button
-      onClick={() => setShowSuccessModal(false)}
-      className="w-full py-3 sm:py-4 rounded-lg font-semibold text-white transition-all duration-200 hover:opacity-90 text-sm sm:text-base"
-      style={{
-        backgroundColor: "rgb(222, 15, 63)",
-        boxShadow: "0 4px 6px -1px rgba(222, 15, 63, 0.3)"
-      }}
-    >
-      Close
-    </button>
-  </div>
-</div>
-
+              <div className="space-y-4 w-full">
+                <button
+                  onClick={() => setShowSuccessModal(false)}
+                  className="w-full py-3 sm:py-4 rounded-lg font-semibold text-white transition-all duration-200 hover:opacity-90 text-sm sm:text-base"
+                  style={{
+                    backgroundColor: "rgb(222, 15, 63)",
+                    boxShadow: "0 4px 6px -1px rgba(222, 15, 63, 0.3)"
+                  }}
+                >
+                  Close
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}
@@ -288,17 +286,4 @@ export default function CertificatePage() {
       `}</style>
     </div>
   );
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
