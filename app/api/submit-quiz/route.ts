@@ -209,11 +209,11 @@ async function saveToGoogleSheets(data: {
 }
 
 function getHappinessCategory(score: number): string {
-  if (score < 45) return "Low Happiness";
-  if (score <= 59) return "Moderate Happiness";
-  if (score <= 74) return "Good Happiness";
-  if (score <= 89) return "High Happiness";
-  return "Exceptional Happiness";
+  if (score < 45) return "Seeker";
+  if (score <= 59) return "Creator";
+  if (score <= 74) return "Innovator";
+  if (score <= 89) return "Prodigy";
+  return "Luminary";
 }
 
 function generateHTMLEmail(
@@ -227,12 +227,100 @@ function generateHTMLEmail(
 
   return `
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="x-apple-disable-message-reformatting">
+  <meta name="color-scheme" content="light">
+  <meta name="supported-color-schemes" content="light">
+  <!--[if gte mso 9]>
+  <xml>
+    <o:OfficeDocumentSettings>
+      <o:AllowPNG/>
+      <o:PixelsPerInch>96</o:PixelsPerInch>
+    </o:OfficeDocumentSettings>
+  </xml>
+  <![endif]-->
+  <!--[if mso]>
   <style type="text/css">
+    body, table, td, p, a, span, div {
+      font-family: Arial, Helvetica, sans-serif !important;
+    }
+    .button-td {
+      background-color: #d4af37 !important;
+    }
+    .button-a {
+      background-color: #d4af37 !important;
+      color: #1b4d2e !important;
+    }
+  </style>
+  <![endif]-->
+  <style type="text/css">
+    /* Reset styles */
+    body, table, td, p, a, li, blockquote {
+      -webkit-text-size-adjust: 100%;
+      -ms-text-size-adjust: 100%;
+    }
+    table, td {
+      mso-table-lspace: 0pt;
+      mso-table-rspace: 0pt;
+    }
+    img {
+      -ms-interpolation-mode: bicubic;
+      border: 0;
+      height: auto;
+      line-height: 100%;
+      outline: none;
+      text-decoration: none;
+    }
+    body {
+      margin: 0 !important;
+      padding: 0 !important;
+      width: 100% !important;
+    }
+    /* Prevent dark mode color changes */
+    [data-ogsc] body,
+    [data-ogsb] body {
+      background-color: #fffbea !important;
+    }
+    [data-ogsc] .email-bg,
+    [data-ogsb] .email-bg {
+      background-color: #fffbea !important;
+    }
+    [data-ogsc] .content-bg,
+    [data-ogsb] .content-bg {
+      background-color: #ffffff !important;
+    }
+    [data-ogsc] .header-bg,
+    [data-ogsb] .header-bg {
+      background-color: #fff9d9 !important;
+    }
+    [data-ogsc] .button-td,
+    [data-ogsb] .button-td {
+      background-color: #d4af37 !important;
+    }
+    [data-ogsc] .button-a,
+    [data-ogsb] .button-a {
+      color: #1b4d2e !important;
+    }
+    [data-ogsc] .text-dark,
+    [data-ogsb] .text-dark {
+      color: #355a41 !important;
+    }
+    [data-ogsc] .text-green,
+    [data-ogsb] .text-green {
+      color: #1b6b36 !important;
+    }
+    [data-ogsc] .text-gray,
+    [data-ogsb] .text-gray {
+      color: #666666 !important;
+    }
+    [data-ogsc] .link-green,
+    [data-ogsb] .link-green {
+      color: #1b6b36 !important;
+    }
     @media only screen and (max-width: 600px) {
       .email-container {
         width: 100% !important;
@@ -276,26 +364,23 @@ function generateHTMLEmail(
         word-wrap: break-word !important;
       }
       .mobile-button {
-        padding: 10px 16px !important;
+        padding: 10px 20px !important;
         font-size: 12px !important;
       }
       .social-icon-cell {
         padding: 0 8px !important;
       }
-      .button-cell {
-        padding: 0 4px !important;
-      }
     }
   </style>
 </head>
 
-<body style="margin:0; padding:0; background-color:#fffbea; font-family:Arial, Helvetica, sans-serif; -webkit-text-size-adjust:100%; -ms-text-size-adjust:100%;">
+<body style="margin:0; padding:0; background-color:#fffbea; font-family:Arial, Helvetica, sans-serif; -webkit-text-size-adjust:100%; -ms-text-size-adjust:100%;" class="email-bg">
 
-<table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation" style="background-color:#fffbea;">
+<table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation" style="background-color:#fffbea;" class="email-bg" bgcolor="#fffbea">
   <tr>
     <td align="center" style="padding:40px 10px;">
       
-      <table class="email-container" width="600" cellpadding="0" cellspacing="0" border="0" role="presentation" style="
+      <table class="email-container content-bg" width="600" cellpadding="0" cellspacing="0" border="0" role="presentation" style="
         max-width:600px;
         width:100%;
         background-color:#ffffff;
@@ -303,34 +388,34 @@ function generateHTMLEmail(
         overflow:hidden;
         box-shadow:0 20px 60px rgba(0,0,0,0.08);
         border:1px solid #f7f1c6;
-      ">
+      " bgcolor="#ffffff">
 
         <!-- Header -->
         <tr>
-          <td class="mobile-header mobile-padding-small" style="
+          <td class="mobile-header mobile-padding-small header-bg" style="
             padding:14px 40px;
             font-size:13px;
             letter-spacing:2px;
             color:#2b4d36;
-            background:linear-gradient(90deg, #fff9d9, #fffef0);
+            background-color:#fff9d9;
             border-bottom:1px solid #f5eec2;
             font-weight:600;
             line-height:1.4;
             text-align:center;
             font-family:Arial, Helvetica, sans-serif;
-          ">
-            HAPPINESS INDEX REPORT
+          " bgcolor="#fff9d9">
+            
           </td>
         </tr>
 
         <!-- Title -->
         <tr>
-          <td class="mobile-padding" align="center" style="padding:30px 35px 20px 35px;">
-            <p class="mobile-welcome" style="font-size:12px; letter-spacing:3px; color:#666666; margin:0 0 8px 0; line-height:1.4; font-family:Arial, Helvetica, sans-serif;">
+          <td class="mobile-padding content-bg" align="center" style="padding:30px 35px 20px 35px; background-color:#ffffff;" bgcolor="#ffffff">
+            <p class="mobile-welcome text-gray" style="font-size:12px; letter-spacing:3px; color:#666666; margin:0 0 8px 0; line-height:1.4; font-family:Arial, Helvetica, sans-serif;">
               WELCOME TO YOUR
             </p>
 
-            <h1 class="mobile-heading" style="
+            <h1 class="mobile-heading text-green" style="
               font-family:Georgia, 'Times New Roman', serif;
               font-size:32px;
               font-weight:700;
@@ -338,7 +423,7 @@ function generateHTMLEmail(
               color:#1b6b36;
               line-height:1.3;
             ">
-              Happiness Assessment Report
+              Happiness Index Report
             </h1>
 
             <p class="mobile-subtitle mobile-subheading" style="
@@ -348,12 +433,12 @@ function generateHTMLEmail(
               font-family:Georgia, 'Times New Roman', serif;
               line-height:1.4;
             ">
-              Your personalised emotional wellness insights
+              Your personalised emotional wellness insights!
             </p>
 
             <table class="mobile-divider" width="80%" cellpadding="0" cellspacing="0" border="0" role="presentation" style="margin:15px auto 0 auto;">
               <tr>
-                <td style="height:2px; background-color:#f2e9b3;"></td>
+                <td style="height:2px; background-color:#f2e9b3;" bgcolor="#f2e9b3"></td>
               </tr>
             </table>
           </td>
@@ -361,90 +446,75 @@ function generateHTMLEmail(
 
         <!-- Content -->
         <tr>
-          <td class="mobile-padding" style="padding:0 45px 22px 45px; color:#355a41; line-height:1.6; font-family:Arial, Helvetica, sans-serif;">
+          <td class="mobile-padding content-bg" style="padding:0 45px 22px 45px; color:#355a41; line-height:1.6; font-family:Arial, Helvetica, sans-serif; background-color:#ffffff;" bgcolor="#ffffff">
 
-            <p class="mobile-font-small" style="font-size:15px; margin:0 0 12px 0; color:#355a41;">
-              Dear <strong style="color:#1b6b36;">${name}</strong>,
+            <p class="mobile-font-small text-dark" style="font-size:15px; margin:0 0 12px 0; color:#355a41;">
+              Dear <strong class="text-green" style="color:#1b6b36;">${name}</strong>,
             </p>
 
-            <p class="mobile-font-small" style="font-size:14px; color:#3d5a46; margin:0 0 12px 0; line-height:1.6;">
+            <p class="mobile-font-small text-dark" style="font-size:14px; color:#3d5a46; margin:0 0 12px 0; line-height:1.6;">
               Thank you for taking the Happiness Index (HI) and reflecting on your emotional well-being.
             </p>
 
-            <p class="mobile-font-small" style="font-size:14px; color:#2f4e39; margin:0 0 12px 0; line-height:1.6;">
+            <p class="mobile-font-small text-dark" style="font-size:14px; color:#2f4e39; margin:0 0 12px 0; line-height:1.6;">
               Your score is
-              <strong style="color:#1b6b36; font-size:16px;">${score}</strong>,
+              <strong class="text-green" style="color:#1b6b36; font-size:16px;">${score}</strong>,
               placing you in the
-              <strong style="color:#1b6b36;">${happinessCategory}</strong> category.
+              <strong class="text-green" style="color:#1b6b36;">${happinessCategory}</strong> category.
+              <a href="${pdfUrl}" target="_blank" class="link-green" style="color:#1b6b36; text-decoration:underline; font-weight:600;">Click here to view your report</a>.
             </p>
 
-            <p class="mobile-font-small" style="font-size:14px; color:#3d5a46; margin:0 0 12px 0; line-height:1.6;">
-              Please find below your personalised Happiness Index Report and your Certificate of Participation as a token of appreciation for your effort.
+            <p class="mobile-font-small text-dark" style="font-size:14px; color:#3d5a46; margin:0 0 12px 0; line-height:1.6;">
+              Please find below your Certificate of Participation as a token of appreciation for your effort.
             </p>
 
-            <p class="mobile-font-small" style="font-size:14px; color:#3d5a46; margin:0 0 18px 0; line-height:1.6;">
+            <p class="mobile-font-small text-dark" style="font-size:14px; color:#3d5a46; margin:0 0 18px 0; line-height:1.6;">
               We hope the insights help you gain clarity and awareness.
             </p>
 
-            <p class="mobile-font-small" style="font-size:14px; color:#3d5a46; margin:0 0 18px 0; line-height:1.6;">
+            <p class="mobile-font-small text-dark" style="font-size:14px; color:#3d5a46; margin:0 0 18px 0; line-height:1.6;">
               If you found this meaningful, we encourage you to share the Happiness Index with people you care about - a small step that can make a real difference.
             </p>
 
-            <!-- Two Buttons Side by Side -->
+            <!-- Single Centered Download Certificate Button -->
             <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation" style="margin:12px 0 25px 0;">
               <tr>
                 <td align="center">
+                  <!--[if mso]>
+                  <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${certificateUrl}" style="height:44px;v-text-anchor:middle;width:220px;" arcsize="50%" strokecolor="#d4af37" fillcolor="#d4af37">
+                    <w:anchorlock/>
+                    <center style="color:#1b4d2e;font-family:Arial,sans-serif;font-size:14px;font-weight:bold;">Download Certificate</center>
+                  </v:roundrect>
+                  <![endif]-->
+                  <!--[if !mso]><!-->
                   <table cellpadding="0" cellspacing="0" border="0" role="presentation">
                     <tr>
-                      <!-- View Report Button -->
-                      <td class="button-cell" align="center" style="padding:0 6px;">
-                        <table cellpadding="0" cellspacing="0" border="0" role="presentation">
-                          <tr>
-                            <td align="center" style="border-radius:25px; background:linear-gradient(135deg, #1b6b36, #2d8a4d);">
-                              <a href="${pdfUrl}" target="_blank" class="mobile-button" style="
-                                display:inline-block;
-                                padding:12px 20px;
-                                font-family:Arial, Helvetica, sans-serif;
-                                font-size:14px;
-                                font-weight:600;
-                                color:#ffffff;
-                                text-decoration:none;
-                                border-radius:25px;
-                                letter-spacing:0.3px;
-                                white-space:nowrap;
-                              ">
-                                View Report
-                              </a>
-                            </td>
-                          </tr>
-                        </table>
-                      </td>
-
-                      <!-- Download Certificate Button -->
-                      <td class="button-cell" align="center" style="padding:0 6px;">
-                        <table cellpadding="0" cellspacing="0" border="0" role="presentation">
-                          <tr>
-                            <td align="center" style="border-radius:25px; background:linear-gradient(135deg, #d4af37, #f4c542);">
-                              <a href="${certificateUrl}" target="_blank" class="mobile-button" style="
-                                display:inline-block;
-                                padding:12px 20px;
-                                font-family:Arial, Helvetica, sans-serif;
-                                font-size:14px;
-                                font-weight:600;
-                                color:#ffffff;
-                                text-decoration:none;
-                                border-radius:25px;
-                                letter-spacing:0.3px;
-                                white-space:nowrap;
-                              ">
-                                Download Certificate
-                              </a>
-                            </td>
-                          </tr>
-                        </table>
+                      <td align="center" class="button-td" style="
+                        border-radius:25px;
+                        background-color:#d4af37;
+                        mso-padding-alt:0;
+                      " bgcolor="#d4af37">
+                        <a href="${certificateUrl}" target="_blank" class="button-a mobile-button" style="
+                          display:inline-block;
+                          padding:14px 28px;
+                          font-family:Arial, Helvetica, sans-serif;
+                          font-size:14px;
+                          font-weight:700;
+                          color:#1b4d2e;
+                          text-decoration:none;
+                          border-radius:25px;
+                          letter-spacing:0.3px;
+                          white-space:nowrap;
+                          background-color:#d4af37;
+                          border:2px solid #d4af37;
+                          mso-padding-alt:0;
+                        ">
+                          Download Certificate
+                        </a>
                       </td>
                     </tr>
                   </table>
+                  <!--<![endif]-->
                 </td>
               </tr>
             </table>
@@ -452,9 +522,9 @@ function generateHTMLEmail(
             <!-- Footer -->
             <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-top:1px solid #f7eeb4; padding-top:20px; margin-top:10px;">
               <tr>
-                <td align="center">
+                <td align="center" class="content-bg" style="background-color:#ffffff;" bgcolor="#ffffff">
 
-                  <p style="font-size:15px; color:#666666; margin:0 0 8px 0; line-height:1.4; font-family:Arial, Helvetica, sans-serif;">
+                  <p class="text-gray" style="font-size:15px; color:#666666; margin:0 0 8px 0; line-height:1.4; font-family:Arial, Helvetica, sans-serif;">
                     <strong>Stay Happy, Stay Healthy</strong>
                   </p>
 
@@ -462,7 +532,7 @@ function generateHTMLEmail(
                     Dr. Vrushali
                   </p>
 
-                  <p style="margin:5px 0 15px 0; font-family: 'Comic Sans MS', 'Trebuchet MS', Arial, sans-serif; font-size:18px; color:#2f4e39; line-height:1.3;">
+                  <p class="text-dark" style="margin:5px 0 15px 0; font-family: 'Comic Sans MS', 'Trebuchet MS', Arial, sans-serif; font-size:18px; color:#2f4e39; line-height:1.3;">
                     Happiness Coach
                   </p>
 
@@ -479,10 +549,10 @@ function generateHTMLEmail(
                                   style="
                                     border-radius:50%;
                                     border:4px solid #d4af37;
-                                    background:#ffffff;
-                                  ">
+                                    background-color:#ffffff;
+                                  " bgcolor="#ffffff">
                                 <img src="https://cdn-icons-png.flaticon.com/512/5968/5968764.png"
-                                     width="28" height="28" style="display:block;">
+                                     width="28" height="28" alt="Facebook" style="display:block;">
                               </td>
                             </tr>
                           </table>
@@ -498,10 +568,10 @@ function generateHTMLEmail(
                                   style="
                                     border-radius:50%;
                                     border:4px solid #d4af37;
-                                    background:#ffffff;
-                                  ">
+                                    background-color:#ffffff;
+                                  " bgcolor="#ffffff">
                                 <img src="https://cdn-icons-png.flaticon.com/512/3536/3536505.png"
-                                     width="28" height="28" style="display:block;">
+                                     width="28" height="28" alt="LinkedIn" style="display:block;">
                               </td>
                             </tr>
                           </table>
@@ -517,10 +587,10 @@ function generateHTMLEmail(
                                   style="
                                     border-radius:50%;
                                     border:4px solid #d4af37;
-                                    background:#ffffff;
-                                  ">
+                                    background-color:#ffffff;
+                                  " bgcolor="#ffffff">
                                 <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png"
-                                     width="28" height="28" style="display:block;">
+                                     width="28" height="28" alt="Instagram" style="display:block;">
                               </td>
                             </tr>
                           </table>
