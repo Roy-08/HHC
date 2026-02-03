@@ -145,22 +145,17 @@ export default function CertificatePage() {
             src="certificate.png"
             alt="Certificate Background"
             className="absolute inset-0 w-full h-full object-fill"
-            style={{ 
-    top: "-10%",  // Negative value moves image UP
-    left: "0",
-    objectFit: "fill"
-  }}  
+            
             crossOrigin="anonymous"
           />
 
 <div 
   className="absolute left-0 right-0 flex items-center justify-center"
   style={{ 
-    top: "30%",  // Adjust this value to position the name correctly
+    top: "40.5%",  // Adjust this value to position the name correctly
     transform: "translateY(-50%)"
   }}
->
-            <div className="text-center px-4 sm:px-8 w-full">
+>            <div className="text-center px-4 sm:px-8 w-full">
               <p
                 className="font-serif font-bold text-xl sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl break-words leading-tight"
                 style={{
@@ -200,9 +195,7 @@ export default function CertificatePage() {
             )}
           </button>
 
-          <p className="text-sm mt-4" style={{ color: "rgb(107, 114, 128)" }}>
-            Right-click on the certificate to save directly
-          </p>
+          
         </div>
       </div>
 
@@ -295,4 +288,17 @@ export default function CertificatePage() {
       `}</style>
     </div>
   );
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
