@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams } from "react-router-dom";
 import html2canvas from "html2canvas";
 
 export default function CertificateContent() {
-  const searchParams = useSearchParams();
+  const [searchParams] = useSearchParams();
   const [name, setName] = useState<string>("");
   const [date, setDate] = useState<string>("");
   const [isDownloading, setIsDownloading] = useState(false);
@@ -58,7 +58,7 @@ export default function CertificateContent() {
       });
 
       const link = document.createElement("a");
-      const fileName = `Certificate_${name.replace(/\s+/g, "_")}/images/photo1770182393.jpg`;
+      const fileName = `Certificate_${name.replace(/\s+/g, "_")}.png`;
       link.download = fileName;
       link.href = canvas.toDataURL("image/png", 1.0);
       link.click();
@@ -133,7 +133,7 @@ export default function CertificateContent() {
         >
           {/* Certificate Background Image */}
           <img
-            src="/images/photo1770182393.jpg"
+            src="/public/certificate.png"
             alt="Certificate of Participation"
             style={{
               width: "100%",
