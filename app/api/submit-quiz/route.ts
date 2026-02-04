@@ -249,11 +249,11 @@ function generateHTMLEmail(
       font-family: Arial, Helvetica, sans-serif !important;
     }
     .button-td {
-      background-color: #d4af37 !important;
+      background-color: #1b6b36 !important;
     }
     .button-a {
-      background-color: #d4af37 !important;
-      color: #1b4d2e !important;
+      background-color: #1b6b36 !important;
+      color: #ffffff !important;
     }
   </style>
   <![endif]-->
@@ -299,11 +299,11 @@ function generateHTMLEmail(
     }
     [data-ogsc] .button-td,
     [data-ogsb] .button-td {
-      background-color: #d4af37 !important;
+      background-color: #1b6b36 !important;
     }
     [data-ogsc] .button-a,
     [data-ogsb] .button-a {
-      color: #1b4d2e !important;
+      color: #ffffff !important;
     }
     [data-ogsc] .text-dark,
     [data-ogsb] .text-dark {
@@ -476,14 +476,14 @@ function generateHTMLEmail(
               If you found this meaningful, we encourage you to share the Happiness Index with people you care about - a small step that can make a real difference.
             </p>
 
-            <!-- Single Centered Download Certificate Button -->
+            <!-- Single Centered Download Certificate Button - NOW GREEN -->
             <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation" style="margin:12px 0 25px 0;">
               <tr>
                 <td align="center">
                   <!--[if mso]>
-                  <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${certificateUrl}" style="height:44px;v-text-anchor:middle;width:220px;" arcsize="50%" strokecolor="#d4af37" fillcolor="#d4af37">
+                  <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${certificateUrl}" style="height:44px;v-text-anchor:middle;width:220px;" arcsize="50%" strokecolor="#1b6b36" fillcolor="#1b6b36">
                     <w:anchorlock/>
-                    <center style="color:#1b4d2e;font-family:Arial,sans-serif;font-size:14px;font-weight:bold;">Download Certificate</center>
+                    <center style="color:#ffffff;font-family:Arial,sans-serif;font-size:14px;font-weight:bold;">Download Certificate</center>
                   </v:roundrect>
                   <![endif]-->
                   <!--[if !mso]><!-->
@@ -491,22 +491,22 @@ function generateHTMLEmail(
                     <tr>
                       <td align="center" class="button-td" style="
                         border-radius:25px;
-                        background-color:#d4af37;
+                        background-color:#1b6b36;
                         mso-padding-alt:0;
-                      " bgcolor="#d4af37">
+                      " bgcolor="#1b6b36">
                         <a href="${certificateUrl}" target="_blank" class="button-a mobile-button" style="
                           display:inline-block;
                           padding:14px 28px;
                           font-family:Arial, Helvetica, sans-serif;
                           font-size:14px;
                           font-weight:700;
-                          color:#1b4d2e;
+                          color:#ffffff;
                           text-decoration:none;
                           border-radius:25px;
                           letter-spacing:0.3px;
                           white-space:nowrap;
-                          background-color:#d4af37;
-                          border:2px solid #d4af37;
+                          background-color:#1b6b36;
+                          border:2px solid #1b6b36;
                           mso-padding-alt:0;
                         ">
                           Download Certificate
@@ -614,5 +614,7 @@ function generateHTMLEmail(
 </table>
 </body>
 </html>
+
 `;
+
 }
