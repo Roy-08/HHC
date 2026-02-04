@@ -4,6 +4,9 @@ import './globals.css';
 export const metadata: Metadata = {
   title: 'Happiness Index',
   description: 'Happiness Index Quiz - Discover your happiness score',
+  icons:{
+    icon:'/logo.png'
+  }
 };
 
 export default function RootLayout({
