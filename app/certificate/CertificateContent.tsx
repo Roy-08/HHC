@@ -281,7 +281,7 @@ export default function CertificateContent() {
                 fontSize: "clamp(11px, 2.5vw, 14px)",
                 color: "#666666",
                 lineHeight: "1.6",
-                fontStyle:"bold",
+                fontWeight: "bold",
                 margin: "0",
                 fontFamily: "Times New Roman"              }}>
                 We&apos;d love for you to share your Happiness Index journey on social media. 
