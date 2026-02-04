@@ -1,234 +1,329 @@
 "use client";
 
+import { useEffect, useState, useRef } from "react";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import html2canvas from "html2canvas";
 
 export default function CertificateContent() {
   const searchParams = useSearchParams();
-  const name = searchParams.get("name") || "Participant";
-
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [name, setName] = useState<string>("");
+  const [date, setDate] = useState<string>("");
   const [isDownloading, setIsDownloading] = useState(false);
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+  const certificateRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    setIsLoaded(true);
-  }, []);
+    const nameParam = searchParams.get("name");
+    const dateParam = searchParams.get("date");
+    
+    if (nameParam) {
+      setName(decodeURIComponent(nameParam));
+    }
+    if (dateParam) {
+      setDate(decodeURIComponent(dateParam));
+    }
+  }, [searchParams]);
 
   const handleDownload = async () => {
-    setIsDownloading(true);
-    
-    try {
-      const certificateElement = document.getElementById("certificate-container");
-      if (!certificateElement) {
-        throw new Error("Certificate element not found");
-      }
+    if (!certificateRef.current) return;
 
-      // Use dom-to-image-more instead of html2canvas - it handles modern CSS better
-      const domtoimage = (await import("dom-to-image-more")).default;
-      
-      // Convert to blob with high quality
-      const blob = await domtoimage.toBlob(certificateElement, {
-        quality: 1.0,
-        bgcolor: '#ffffff',
-        width: certificateElement.offsetWidth * 2,
-        height: certificateElement.offsetHeight * 2,
-        style: {
-          transform: 'scale(2)',
-          transformOrigin: 'top left'
+    setIsDownloading(true);
+
+    try {
+      // Wait for fonts and images to load
+      await new Promise(resolve => setTimeout(resolve, 800));
+
+      const canvas = await html2canvas(certificateRef.current, {
+        scale: 2,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: "#ffffff",
+        logging: false,
+        imageTimeout: 0,
+        onclone: (clonedDoc) => {
+          const clonedElement = clonedDoc.getElementById('certificate-container');
+          if (clonedElement) {
+            // Force all colors to RGB to avoid lab() function errors
+            const allElements = clonedElement.querySelectorAll('*');
+            allElements.forEach((el) => {
+              const htmlEl = el as HTMLElement;
+              const computedStyle = window.getComputedStyle(htmlEl);
+              
+              // Convert any lab() colors to RGB
+              if (computedStyle.color && computedStyle.color.includes('lab(')) {
+                htmlEl.style.color = '#800020';
+              }
+              if (computedStyle.backgroundColor && computedStyle.backgroundColor.includes('lab(')) {
+                htmlEl.style.backgroundColor = '#ffffff';
+              }
+            });
+          }
         }
       });
 
-      // Download the blob
-      const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
-      const fileName = `certificate-${name.replace(/\s+/g, "-")}-${Date.now()}.png`;
-      link.download = fileName;
-      link.href = url;
-      link.style.display = "none";
-      
-      document.body.appendChild(link);
+      link.download = `Certificate_${name.replace(/\s+/g, "_")}/images/photo1770181771.jpg`;
+      link.href = canvas.toDataURL("image/png", 1.0);
       link.click();
-      
-      setTimeout(() => {
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
-        setIsDownloading(false);
-        setShowSuccessModal(true);
-      }, 100);
-      
+
+      setShowSuccessPopup(true);
     } catch (error) {
-      console.error("Download error:", error);
+      console.error("Download failed:", error);
       alert("Failed to download certificate. Please try again.");
+    } finally {
       setIsDownloading(false);
     }
   };
 
   return (
-    <div 
-      className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-8"
-      style={{ backgroundColor: "#ffffff" }}
-    >
-      <div className="max-w-4xl w-full">
-        {/* Header */}
-        <div className="text-center mb-8 sm:mb-12">
-          <h1 
-            className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4"
-            style={{ 
-              color: "#de0f3f",
-              fontFamily: "'Playfair Display', serif"
-            }}
-          >
-            Congratulations, <span style={{ fontFamily: "'Dancing Script', cursive" }}>{name}</span>!
-          </h1>
-        </div>
+    <div style={{
+      minHeight: "100vh",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+      padding: "2rem",
+      backgroundColor: "#ffffff"
+    }}>
+      {/* Congratulations Header */}
+      <div style={{
+        textAlign: "center",
+        marginBottom: "3rem",
+        animation: "fadeIn 0.7s ease-in"
+      }}>
+        <h1 style={{
+          fontSize: "3rem",
+          fontWeight: "bold",
+          color: "#800020",
+          marginBottom: "1rem"
+        }}>
+          Congratulations!
+        </h1>
+        <p style={{
+          fontSize: "2rem",
+          fontWeight: "600",
+          color: "#333333"
+        }}>
+          {name || "Participant"}
+        </p>
+      </div>
 
-        {/* Certificate Container */}
-        <div
-          id="certificate-container"
-          className={`relative w-full rounded-lg overflow-hidden transition-opacity duration-700 ${
-            isLoaded ? "opacity-100" : "opacity-0"
-          }`}
+      {/* Certificate Container */}
+      <div 
+        ref={certificateRef}
+        id="certificate-container"
+        style={{
+          position: "relative",
+          width: "100%",
+          maxWidth: "1200px",
+          marginBottom: "2rem",
+          boxShadow: "0 20px 60px rgba(0,0,0,0.15)",
+          borderRadius: "8px",
+          overflow: "hidden",
+          backgroundColor: "#ffffff"
+        }}
+      >
+        {/* Certificate Background Image */}
+        <img
+          src="/images/photo1770181771.jpg"
+          alt="Certificate of Participation"
           style={{
-            aspectRatio: "1.414/1",
-            backgroundColor: "#ffffff",
-            boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)"
+            width: "100%",
+            height: "auto",
+            display: "block"
           }}
-        >
-          <img
-            src="/images/photo1770122473.jpg"
-            alt="Certificate Background"
-            className="absolute inset-0 w-full h-full object-fill"
-            crossOrigin="anonymous"
-          />
+          crossOrigin="anonymous"
+        />
 
-          <div 
-            className="absolute left-0 right-0 flex items-center justify-center"
-            style={{ 
-              top: "40.5%",
-              transform: "translateY(-50%)"
-            }}
-          >
-            <div className="text-center px-4 sm:px-8 w-full">
-              <p
-                className="font-serif font-bold text-xl sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl break-words leading-tight"
-                style={{
-                  fontFamily: "'Footlight MT Light', 'Apple Chancery', 'Brush Script MT', cursive",
-                  textShadow: "2px 2px 4px rgba(0,0,0,0.1)",
-                  letterSpacing: "0.02em",
-                  color: "#1f2937"
-                }}
-              >
-                {name}
-              </p>
-            </div>
+        {/* Name Overlay - Positioned in center */}
+        <div style={{
+          position: "absolute",
+          top: "0",
+          left: "0",
+          right: "0",
+          bottom: "0",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          pointerEvents: "none"
+        }}>
+          <div style={{
+            textAlign: "center",
+            marginTop: "2%"
+          }}>
+            <p style={{
+              fontFamily: "Georgia, 'Times New Roman', serif",
+              fontWeight: "bold",
+              fontSize: "3.5rem",
+              color: "#800020",
+              textShadow: "1px 1px 2px rgba(0,0,0,0.1)",
+              letterSpacing: "0.05em",
+              margin: "0"
+            }}>
+              {name || "Your Name"}
+            </p>
           </div>
-        </div>
-
-        {/* Download Button */}
-        <div className="text-center mt-8 sm:mt-12">
-          <button
-            onClick={handleDownload}
-            disabled={isDownloading}
-            className="font-semibold py-4 px-12 rounded-lg transition-all duration-200 text-lg disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-90"
-            style={{
-              backgroundColor: isDownloading ? "#9ca3af" : "#de0f3f",
-              color: "#ffffff",
-              boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)"
-            }}
-          >
-            {isDownloading ? (
-              <span className="flex items-center justify-center gap-3">
-                <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                Preparing Download...
-              </span>
-            ) : (
-              "Download Certificate"
-            )}
-          </button>
         </div>
       </div>
 
-      {/* Success Modal */}
-      {showSuccessModal && (
-        <div 
-          className="fixed inset-0 flex items-center justify-center z-50 p-4"
-          style={{ 
-            backgroundColor: "rgba(0, 0, 0, 0.6)",
-            backdropFilter: "blur(4px)"
-          }}
-          onClick={() => setShowSuccessModal(false)}
-        >
-          <div 
-            className="rounded-2xl p-8 sm:p-10 max-w-lg w-full relative overflow-hidden"
-            style={{
-              backgroundColor: "#ffffff",
-              boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)"
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div 
-              className="absolute top-0 left-0 w-full h-32 opacity-10"
-              style={{
-                background: "linear-gradient(135deg, #de0f3f 0%, #ffffff 100%)"
-              }}
-            ></div>
+      {/* Download Button */}
+      <button
+        onClick={handleDownload}
+        disabled={isDownloading}
+        style={{
+          fontSize: "1.125rem",
+          padding: "1rem 2rem",
+          fontWeight: "600",
+          backgroundColor: "#800020",
+          color: "#ffffff",
+          border: "none",
+          borderRadius: "8px",
+          cursor: isDownloading ? "not-allowed" : "pointer",
+          boxShadow: "0 4px 12px rgba(128,0,32,0.3)",
+          transition: "all 0.3s ease",
+          opacity: isDownloading ? 0.7 : 1
+        }}
+        onMouseEnter={(e) => {
+          if (!isDownloading) {
+            e.currentTarget.style.transform = "translateY(-2px)";
+            e.currentTarget.style.boxShadow = "0 6px 16px rgba(128,0,32,0.4)";
+          }
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = "translateY(0)";
+          e.currentTarget.style.boxShadow = "0 4px 12px rgba(128,0,32,0.3)";
+        }}
+      >
+        {isDownloading ? "⏳ Preparing Download..." : "📥 Download Certificate"}
+      </button>
 
-            <div className="text-center relative z-10">
-              <h2 
-                className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4"
-                style={{ 
-                  color: "#de0f3f",
-                  fontFamily: "'Playfair Display', serif"
-                }}
-              >
-                Downloaded Successfully!
-              </h2>
-              
-              <p 
-                className="text-2xl sm:text-3xl font-bold mb-6 break-words"
-                style={{ 
-                  color: "#1f2937",
-                  fontFamily: "'Dancing Script', cursive"
-                }}
-              >
-                {name}
+      {/* Success Popup */}
+      {showSuccessPopup && (
+        <div style={{
+          position: "fixed",
+          top: "0",
+          left: "0",
+          right: "0",
+          bottom: "0",
+          backgroundColor: "rgba(0,0,0,0.5)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          zIndex: 1000,
+          animation: "fadeIn 0.3s ease-in"
+        }}>
+          <div style={{
+            backgroundColor: "#ffffff",
+            borderRadius: "12px",
+            padding: "2.5rem",
+            maxWidth: "500px",
+            width: "90%",
+            boxShadow: "0 20px 60px rgba(0,0,0,0.3)",
+            textAlign: "center",
+            animation: "scaleIn 0.3s ease-out"
+          }}>
+            <h2 style={{
+              fontSize: "2rem",
+              fontWeight: "bold",
+              color: "#800020",
+              marginBottom: "1rem"
+            }}>
+              🎉 Certificate Downloaded!
+            </h2>
+            
+            <p style={{
+              fontSize: "1.125rem",
+              fontWeight: "600",
+              color: "#333333",
+              marginBottom: "1.5rem"
+            }}>
+              Your certificate has been successfully downloaded.
+            </p>
+
+            <div style={{
+              padding: "1.5rem",
+              backgroundColor: "#fff5f5",
+              borderRadius: "8px",
+              marginBottom: "1.5rem"
+            }}>
+              <p style={{
+                fontSize: "1rem",
+                fontWeight: "600",
+                color: "#800020",
+                marginBottom: "0.75rem"
+              }}>
+                📢 Share Your Achievement!
               </p>
-              
-              <div 
-                className="w-16 sm:w-24 h-1 mx-auto mb-6 rounded-full"
-                style={{ backgroundColor: "#de0f3f" }}
-              ></div>
-
-              <p 
-                className="text-base sm:text-lg mb-8 leading-relaxed"
-                style={{ color: "#6b7280" }}
-              >
-                Your certificate has been downloaded successfully!<br />
-                <span className="font-semibold" style={{ color: "#de0f3f" }}>Share your achievement on social media!</span>
+              <p style={{
+                fontSize: "0.875rem",
+                color: "#666666",
+                lineHeight: "1.6"
+              }}>
+                We'd love for you to share your Happiness Index journey on social media. 
+                Inspire others to take the first step towards emotional wellness!
               </p>
-
-              <button
-                onClick={() => setShowSuccessModal(false)}
-                className="w-full py-3 sm:py-4 rounded-lg font-semibold transition-all hover:opacity-90"
-                style={{
-                  backgroundColor: "#de0f3f",
-                  color: "#ffffff",
-                  boxShadow: "0 4px 6px -1px rgba(222, 15, 63, 0.3)"
-                }}
-              >
-                Close
-              </button>
             </div>
+
+            <button
+              onClick={() => setShowSuccessPopup(false)}
+              style={{
+                width: "100%",
+                padding: "0.875rem",
+                fontSize: "1rem",
+                fontWeight: "600",
+                backgroundColor: "#800020",
+                color: "#ffffff",
+                border: "none",
+                borderRadius: "8px",
+                cursor: "pointer",
+                transition: "all 0.3s ease"
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = "#660019";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = "#800020";
+              }}
+            >
+              Got it!
+            </button>
           </div>
         </div>
       )}
 
       <style jsx>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Dancing+Script:wght@700&display=swap');
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+
+        @keyframes scaleIn {
+          from {
+            transform: scale(0.9);
+            opacity: 0;
+          }
+          to {
+            transform: scale(1);
+            opacity: 1;
+          }
+        }
+
+        @media (max-width: 768px) {
+          h1 {
+            font-size: 2rem !important;
+          }
+          p {
+            font-size: 1.5rem !important;
+          }
+          button {
+            font-size: 1rem !important;
+            padding: 0.875rem 1.5rem !important;
+          }
+        }
       `}</style>
     </div>
   );
