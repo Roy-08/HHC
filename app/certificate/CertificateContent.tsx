@@ -82,7 +82,7 @@ export default function CertificateContent() {
         justifyContent: "center",
         padding: "20px 16px",
         backgroundColor: "#ffffff",
-        fontFamily: "Arial, sans-serif"
+        fontFamily: "Footlight MT Light, sans-serif"
       }}>
         {/* Header */}
         <div style={{
@@ -150,7 +150,7 @@ export default function CertificateContent() {
             padding: "0 10%"
           }}>
             <p style={{
-              fontFamily: "'Brush Script MT', 'Lucida Handwriting', cursive",
+              fontFamily: "'Footlight MT Light', 'Lucida Handwriting', cursive",
               fontWeight: "bold",
               fontSize: "clamp(20px, 4vw, 42px)",
               color: "#2B2828",
