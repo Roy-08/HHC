@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams } from "next/navigation";
 import html2canvas from "html2canvas";
 
 export default function CertificateContent() {
