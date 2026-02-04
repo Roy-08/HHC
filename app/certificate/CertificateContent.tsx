@@ -272,7 +272,7 @@ export default function CertificateContent() {
                 fontWeight: "600",
                 color: "#800020",
                 marginBottom: "12px",
-                margin: "0 0 12px 0"
+                margin: "0 0 12px 0",
                 fontFamily: "Footlight MT Light, sans-serif"
               }}>
                  Share Your Achievement!
