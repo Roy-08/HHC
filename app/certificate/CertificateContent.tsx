@@ -33,16 +33,18 @@ export default function CertificateContent() {
     setIsDownloading(true);
 
     try {
-      // Wait for everything to render properly
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // Wait for everything to be fully rendered
+      await new Promise(resolve => setTimeout(resolve, 2000));
 
       const canvas = await html2canvas(certificateRef.current, {
-        scale: 2,
+        scale: 4, // Increased from 2 to 4 for much better quality
         useCORS: true,
         allowTaint: true,
         backgroundColor: null,
         logging: false,
         imageTimeout: 0,
+        removeContainer: false,
+        foreignObjectRendering: false,
         width: certificateRef.current.offsetWidth,
         height: certificateRef.current.offsetHeight,
       });
@@ -106,7 +108,7 @@ export default function CertificateContent() {
             width: "100%",
             maxWidth: "900px",
             marginBottom: "20px",
-            boxShadow: "0 4px 20px rgba(128, 0, 32, 0.15)",
+            boxShadow: "0 4px 12px rgba(128, 0, 32, 0.2)",
             borderRadius: "8px",
             overflow: "hidden",
             backgroundColor: "#ffffff"
@@ -120,30 +122,36 @@ export default function CertificateContent() {
             style={{
               width: "100%",
               height: "auto",
-              display: "block"
+              display: "block",
+              backgroundColor: "#ffffff"
             }}
             crossOrigin="anonymous"
           />
 
-          {/* Name Overlay - Positioned on the line */}
+          {/* Name Overlay - Positioned on the line (moved up) */}
           <div style={{
             position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: "80%",
-            textAlign: "center",
-            marginTop: "-2%"
+            top: "48%",
+            left: "0",
+            right: "0",
+            transform: "translateY(-50%)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            pointerEvents: "none",
+            padding: "0 10%"
           }}>
             <p style={{
-              fontFamily: "'Great Vibes', 'Brush Script MT', cursive",
-              fontWeight: "400",
-              fontSize: "clamp(24px, 4.5vw, 42px)",
+              fontFamily: "'Brush Script MT', 'Lucida Handwriting', cursive",
+              fontWeight: "bold",
+              fontSize: "clamp(20px, 4vw, 42px)",
               color: "#800020",
               textShadow: "1px 1px 2px rgba(0, 0, 0, 0.1)",
               letterSpacing: "0.02em",
               margin: "0",
               padding: "0",
+              textAlign: "center",
+              width: "100%",
               lineHeight: "1.2"
             }}>
               {name || "Your Name"}
@@ -159,18 +167,17 @@ export default function CertificateContent() {
             fontSize: "clamp(14px, 3vw, 18px)",
             padding: "12px 24px",
             fontWeight: "600",
-            backgroundColor: isDownloading ? "#600018" : "#800020",
+            backgroundColor: isDownloading || !imageLoaded ? "#600018" : "#800020",
             color: "#ffffff",
             border: "none",
             borderRadius: "25px",
-            cursor: (isDownloading || !imageLoaded) ? "not-allowed" : "pointer",
+            cursor: isDownloading || !imageLoaded ? "not-allowed" : "pointer",
             boxShadow: "0 4px 12px rgba(128, 0, 32, 0.3)",
             transition: "all 0.3s ease",
-            opacity: (isDownloading || !imageLoaded) ? 0.7 : 1,
+            opacity: isDownloading || !imageLoaded ? 0.7 : 1,
             display: "flex",
             alignItems: "center",
-            gap: "8px",
-            margin: "0 auto"
+            gap: "8px"
           }}
           onMouseEnter={(e) => {
             if (!isDownloading && imageLoaded) {
@@ -183,18 +190,18 @@ export default function CertificateContent() {
             e.currentTarget.style.boxShadow = "0 4px 12px rgba(128, 0, 32, 0.3)";
           }}
         >
-          <span style={{ fontSize: "clamp(16px, 3.5vw, 20px)" }}>💾</span>
-          {isDownloading ? "Preparing..." : !imageLoaded ? "Loading..." : "Download Certificate"}
+          <span style={{ fontSize: "clamp(16px, 4vw, 20px)" }}>💾</span>
+          {isDownloading ? "Preparing Download..." : !imageLoaded ? "Loading..." : "Download Certificate"}
         </button>
 
         {/* Instruction Text */}
         <p style={{
-          marginTop: "12px",
+          marginTop: "16px",
           fontSize: "clamp(11px, 2.5vw, 14px)",
           color: "#666666",
           textAlign: "center",
-          margin: "12px 0 0 0",
-          padding: "0 16px"
+          margin: "16px 0 0 0",
+          padding: "0 20px"
         }}>
           Your certificate will be downloaded as a high-quality image
         </p>
@@ -218,7 +225,7 @@ export default function CertificateContent() {
           <div style={{
             backgroundColor: "#ffffff",
             borderRadius: "12px",
-            padding: "clamp(24px, 5vw, 40px)",
+            padding: "clamp(20px, 5vw, 40px)",
             maxWidth: "500px",
             width: "100%",
             boxShadow: "0 20px 60px rgba(0, 0, 0, 0.3)",
@@ -235,7 +242,7 @@ export default function CertificateContent() {
             </h2>
             
             <p style={{
-              fontSize: "clamp(14px, 3.5vw, 18px)",
+              fontSize: "clamp(14px, 3vw, 18px)",
               fontWeight: "600",
               color: "#333333",
               marginBottom: "24px",
@@ -260,7 +267,7 @@ export default function CertificateContent() {
                 📢 Share Your Achievement!
               </p>
               <p style={{
-                fontSize: "clamp(12px, 2.8vw, 14px)",
+                fontSize: "clamp(11px, 2.5vw, 14px)",
                 color: "#666666",
                 lineHeight: "1.6",
                 margin: "0"
@@ -274,7 +281,7 @@ export default function CertificateContent() {
               onClick={() => setShowSuccessPopup(false)}
               style={{
                 width: "100%",
-                padding: "clamp(10px, 2.5vw, 14px)",
+                padding: "clamp(10px, 3vw, 14px)",
                 fontSize: "clamp(13px, 3vw, 16px)",
                 fontWeight: "600",
                 backgroundColor: "#800020",
