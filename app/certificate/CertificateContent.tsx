@@ -244,7 +244,7 @@ export default function CertificateContent() {
               fontWeight: "bold",
               color: "#800020",
               marginBottom: "16px",
-              fontFamily: "Timew New Roman, sans-serif"
+              fontFamily: "Timew New Roman, sans-serif",
               margin: "0 0 16px 0"
             }}>
                Certificate Downloaded!
