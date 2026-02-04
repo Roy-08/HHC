@@ -27,8 +27,16 @@ export default function CertificateContent() {
     }
   }, [searchParams]);
 
+  // Fallback to set imageLoaded to true after 3 seconds if onLoad doesn't fire
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setImageLoaded(true);
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, []);
+
   const handleDownload = async () => {
-    if (!certificateRef.current || !imageLoaded) return;
+    if (!certificateRef.current) return;
 
     setIsDownloading(true);
 
@@ -37,7 +45,7 @@ export default function CertificateContent() {
       await new Promise(resolve => setTimeout(resolve, 2000));
 
       const canvas = await html2canvas(certificateRef.current, {
-        scale: 4, // Increased from 2 to 4 for much better quality
+        scale: 4,
         useCORS: true,
         allowTaint: true,
         backgroundColor: null,
@@ -119,19 +127,19 @@ export default function CertificateContent() {
             src="/certificate.png"
             alt="Certificate of Participation"
             onLoad={() => setImageLoaded(true)}
+            onError={() => setImageLoaded(true)}
             style={{
               width: "100%",
               height: "auto",
-              display: "block",
-              backgroundColor: "#ffffff"
+              display: "block"
             }}
             crossOrigin="anonymous"
           />
 
-          {/* Name Overlay - Positioned on the line (moved up) */}
+          {/* Name Overlay - Positioned on the line */}
           <div style={{
             position: "absolute",
-            top: "48%",
+            top: "40%",
             left: "0",
             right: "0",
             transform: "translateY(-50%)",
@@ -145,7 +153,7 @@ export default function CertificateContent() {
               fontFamily: "'Brush Script MT', 'Lucida Handwriting', cursive",
               fontWeight: "bold",
               fontSize: "clamp(20px, 4vw, 42px)",
-              color: "#800020",
+              color: "#2B2828",
               textShadow: "1px 1px 2px rgba(0, 0, 0, 0.1)",
               letterSpacing: "0.02em",
               margin: "0",
@@ -272,7 +280,7 @@ export default function CertificateContent() {
                 lineHeight: "1.6",
                 margin: "0"
               }}>
-                We'd love for you to share your Happiness Index journey on social media. 
+                We&apos;d love for you to share your Happiness Index journey on social media. 
                 Inspire others to take the first step towards emotional wellness!
               </p>
             </div>
