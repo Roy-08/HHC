@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import html2canvas from "html2canvas";
 
 export default function CertificateContent() {
-  const [searchParams] = useSearchParams();
+  const searchParams = useSearchParams();
   const [name, setName] = useState<string>("");
   const [date, setDate] = useState<string>("");
   const [isDownloading, setIsDownloading] = useState(false);
@@ -13,14 +13,16 @@ export default function CertificateContent() {
   const certificateRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const nameParam = searchParams.get("name");
-    const dateParam = searchParams.get("date");
-    
-    if (nameParam) {
-      setName(decodeURIComponent(nameParam));
-    }
-    if (dateParam) {
-      setDate(decodeURIComponent(dateParam));
+    if (searchParams) {
+      const nameParam = searchParams.get("name");
+      const dateParam = searchParams.get("date");
+      
+      if (nameParam) {
+        setName(decodeURIComponent(nameParam));
+      }
+      if (dateParam) {
+        setDate(decodeURIComponent(dateParam));
+      }
     }
   }, [searchParams]);
 
@@ -133,7 +135,7 @@ export default function CertificateContent() {
         >
           {/* Certificate Background Image */}
           <img
-            src="/public/certificate.png"
+            src="/images/Certificate.jpg"
             alt="Certificate of Participation"
             style={{
               width: "100%",
