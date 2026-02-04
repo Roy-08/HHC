@@ -30,39 +30,36 @@ export default function CertificateContent() {
     setIsDownloading(true);
 
     try {
-      // Wait for fonts and images to load
-      await new Promise(resolve => setTimeout(resolve, 800));
+      // Wait for images to load
+      await new Promise(resolve => setTimeout(resolve, 1000));
 
       const canvas = await html2canvas(certificateRef.current, {
-        scale: 2,
+        scale: 3,
         useCORS: true,
-        allowTaint: true,
+        allowTaint: false,
         backgroundColor: "#ffffff",
         logging: false,
-        imageTimeout: 0,
+        imageTimeout: 15000,
+        removeContainer: true,
+        foreignObjectRendering: false,
+        // This prevents lab() color function errors
         onclone: (clonedDoc) => {
-          const clonedElement = clonedDoc.getElementById('certificate-container');
+          const clonedElement = clonedDoc.querySelector('#certificate-container');
           if (clonedElement) {
-            // Force all colors to RGB to avoid lab() function errors
+            // Force all elements to use RGB colors only
             const allElements = clonedElement.querySelectorAll('*');
             allElements.forEach((el) => {
               const htmlEl = el as HTMLElement;
-              const computedStyle = window.getComputedStyle(htmlEl);
-              
-              // Convert any lab() colors to RGB
-              if (computedStyle.color && computedStyle.color.includes('lab(')) {
-                htmlEl.style.color = '#800020';
-              }
-              if (computedStyle.backgroundColor && computedStyle.backgroundColor.includes('lab(')) {
-                htmlEl.style.backgroundColor = '#ffffff';
-              }
+              htmlEl.style.color = htmlEl.style.color || 'rgb(128, 0, 32)';
+              htmlEl.style.backgroundColor = htmlEl.style.backgroundColor || 'rgb(255, 255, 255)';
             });
           }
         }
       });
 
       const link = document.createElement("a");
-      link.download = `Certificate_${name.replace(/\s+/g, "_")}/images/photo1770181771.jpg`;
+      const fileName = `Certificate_${name.replace(/\s+/g, "_")}/images/photo1770182098.jpg`;
+      link.download = fileName;
       link.href = canvas.toDataURL("image/png", 1.0);
       link.click();
 
@@ -76,126 +73,132 @@ export default function CertificateContent() {
   };
 
   return (
-    <div style={{
-      minHeight: "100vh",
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      justifyContent: "center",
-      padding: "2rem",
-      backgroundColor: "#ffffff"
-    }}>
-      {/* Congratulations Header */}
+    <>
       <div style={{
-        textAlign: "center",
-        marginBottom: "3rem",
-        animation: "fadeIn 0.7s ease-in"
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "32px 16px",
+        backgroundColor: "rgb(255, 255, 255)",
+        fontFamily: "Arial, sans-serif"
       }}>
-        <h1 style={{
-          fontSize: "3rem",
-          fontWeight: "bold",
-          color: "#800020",
-          marginBottom: "1rem"
-        }}>
-          Congratulations!
-        </h1>
-        <p style={{
-          fontSize: "2rem",
-          fontWeight: "600",
-          color: "#333333"
-        }}>
-          {name || "Participant"}
-        </p>
-      </div>
-
-      {/* Certificate Container */}
-      <div 
-        ref={certificateRef}
-        id="certificate-container"
-        style={{
-          position: "relative",
-          width: "100%",
-          maxWidth: "1200px",
-          marginBottom: "2rem",
-          boxShadow: "0 20px 60px rgba(0,0,0,0.15)",
-          borderRadius: "8px",
-          overflow: "hidden",
-          backgroundColor: "#ffffff"
-        }}
-      >
-        {/* Certificate Background Image */}
-        <img
-          src="/images/photo1770181771.jpg"
-          alt="Certificate of Participation"
-          style={{
-            width: "100%",
-            height: "auto",
-            display: "block"
-          }}
-          crossOrigin="anonymous"
-        />
-
-        {/* Name Overlay - Positioned in center */}
+        {/* Congratulations Header */}
         <div style={{
-          position: "absolute",
-          top: "0",
-          left: "0",
-          right: "0",
-          bottom: "0",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          pointerEvents: "none"
+          textAlign: "center",
+          marginBottom: "48px"
         }}>
-          <div style={{
-            textAlign: "center",
-            marginTop: "2%"
+          <h1 style={{
+            fontSize: "48px",
+            fontWeight: "bold",
+            color: "rgb(128, 0, 32)",
+            marginBottom: "16px",
+            margin: "0 0 16px 0"
           }}>
-            <p style={{
-              fontFamily: "Georgia, 'Times New Roman', serif",
-              fontWeight: "bold",
-              fontSize: "3.5rem",
-              color: "#800020",
-              textShadow: "1px 1px 2px rgba(0,0,0,0.1)",
-              letterSpacing: "0.05em",
-              margin: "0"
+            Congratulations!
+          </h1>
+          <p style={{
+            fontSize: "32px",
+            fontWeight: "600",
+            color: "rgb(51, 51, 51)",
+            margin: "0"
+          }}>
+            {name || "Participant"}
+          </p>
+        </div>
+
+        {/* Certificate Container */}
+        <div 
+          ref={certificateRef}
+          id="certificate-container"
+          style={{
+            position: "relative",
+            width: "100%",
+            maxWidth: "1200px",
+            marginBottom: "32px",
+            boxShadow: "0 20px 60px rgba(0, 0, 0, 0.15)",
+            borderRadius: "8px",
+            overflow: "hidden",
+            backgroundColor: "rgb(255, 255, 255)"
+          }}
+        >
+          {/* Certificate Background Image */}
+          <img
+            src="/images/photo1770182100.jpg"
+            alt="Certificate of Participation"
+            style={{
+              width: "100%",
+              height: "auto",
+              display: "block",
+              backgroundColor: "rgb(255, 255, 255)"
+            }}
+            crossOrigin="anonymous"
+          />
+
+          {/* Name Overlay - Positioned in center */}
+          <div style={{
+            position: "absolute",
+            top: "0",
+            left: "0",
+            right: "0",
+            bottom: "0",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            pointerEvents: "none"
+          }}>
+            <div style={{
+              textAlign: "center",
+              marginTop: "2%"
             }}>
-              {name || "Your Name"}
-            </p>
+              <p style={{
+                fontFamily: "Georgia, 'Times New Roman', serif",
+                fontWeight: "bold",
+                fontSize: "56px",
+                color: "rgb(128, 0, 32)",
+                textShadow: "1px 1px 2px rgba(0, 0, 0, 0.1)",
+                letterSpacing: "0.05em",
+                margin: "0",
+                padding: "0"
+              }}>
+                {name || "Your Name"}
+              </p>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Download Button */}
-      <button
-        onClick={handleDownload}
-        disabled={isDownloading}
-        style={{
-          fontSize: "1.125rem",
-          padding: "1rem 2rem",
-          fontWeight: "600",
-          backgroundColor: "#800020",
-          color: "#ffffff",
-          border: "none",
-          borderRadius: "8px",
-          cursor: isDownloading ? "not-allowed" : "pointer",
-          boxShadow: "0 4px 12px rgba(128,0,32,0.3)",
-          transition: "all 0.3s ease",
-          opacity: isDownloading ? 0.7 : 1
-        }}
-        onMouseEnter={(e) => {
-          if (!isDownloading) {
-            e.currentTarget.style.transform = "translateY(-2px)";
-            e.currentTarget.style.boxShadow = "0 6px 16px rgba(128,0,32,0.4)";
-          }
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.transform = "translateY(0)";
-          e.currentTarget.style.boxShadow = "0 4px 12px rgba(128,0,32,0.3)";
-        }}
-      >
-        {isDownloading ? "⏳ Preparing Download..." : "📥 Download Certificate"}
-      </button>
+        {/* Download Button */}
+        <button
+          onClick={handleDownload}
+          disabled={isDownloading}
+          style={{
+            fontSize: "18px",
+            padding: "16px 32px",
+            fontWeight: "600",
+            backgroundColor: isDownloading ? "rgb(102, 0, 25)" : "rgb(128, 0, 32)",
+            color: "rgb(255, 255, 255)",
+            border: "none",
+            borderRadius: "8px",
+            cursor: isDownloading ? "not-allowed" : "pointer",
+            boxShadow: "0 4px 12px rgba(128, 0, 32, 0.3)",
+            transition: "all 0.3s ease",
+            opacity: isDownloading ? 0.7 : 1
+          }}
+          onMouseEnter={(e) => {
+            if (!isDownloading) {
+              e.currentTarget.style.transform = "translateY(-2px)";
+              e.currentTarget.style.boxShadow = "0 6px 16px rgba(128, 0, 32, 0.4)";
+            }
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = "translateY(0)";
+            e.currentTarget.style.boxShadow = "0 4px 12px rgba(128, 0, 32, 0.3)";
+          }}
+        >
+          {isDownloading ? "⏳ Preparing Download..." : "📥 Download Certificate"}
+        </button>
+      </div>
 
       {/* Success Popup */}
       {showSuccessPopup && (
@@ -205,59 +208,61 @@ export default function CertificateContent() {
           left: "0",
           right: "0",
           bottom: "0",
-          backgroundColor: "rgba(0,0,0,0.5)",
+          backgroundColor: "rgba(0, 0, 0, 0.5)",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          zIndex: 1000,
-          animation: "fadeIn 0.3s ease-in"
+          zIndex: 1000
         }}>
           <div style={{
-            backgroundColor: "#ffffff",
+            backgroundColor: "rgb(255, 255, 255)",
             borderRadius: "12px",
-            padding: "2.5rem",
+            padding: "40px",
             maxWidth: "500px",
             width: "90%",
-            boxShadow: "0 20px 60px rgba(0,0,0,0.3)",
-            textAlign: "center",
-            animation: "scaleIn 0.3s ease-out"
+            boxShadow: "0 20px 60px rgba(0, 0, 0, 0.3)",
+            textAlign: "center"
           }}>
             <h2 style={{
-              fontSize: "2rem",
+              fontSize: "32px",
               fontWeight: "bold",
-              color: "#800020",
-              marginBottom: "1rem"
+              color: "rgb(128, 0, 32)",
+              marginBottom: "16px",
+              margin: "0 0 16px 0"
             }}>
               🎉 Certificate Downloaded!
             </h2>
             
             <p style={{
-              fontSize: "1.125rem",
+              fontSize: "18px",
               fontWeight: "600",
-              color: "#333333",
-              marginBottom: "1.5rem"
+              color: "rgb(51, 51, 51)",
+              marginBottom: "24px",
+              margin: "0 0 24px 0"
             }}>
               Your certificate has been successfully downloaded.
             </p>
 
             <div style={{
-              padding: "1.5rem",
-              backgroundColor: "#fff5f5",
+              padding: "24px",
+              backgroundColor: "rgb(255, 245, 245)",
               borderRadius: "8px",
-              marginBottom: "1.5rem"
+              marginBottom: "24px"
             }}>
               <p style={{
-                fontSize: "1rem",
+                fontSize: "16px",
                 fontWeight: "600",
-                color: "#800020",
-                marginBottom: "0.75rem"
+                color: "rgb(128, 0, 32)",
+                marginBottom: "12px",
+                margin: "0 0 12px 0"
               }}>
                 📢 Share Your Achievement!
               </p>
               <p style={{
-                fontSize: "0.875rem",
-                color: "#666666",
-                lineHeight: "1.6"
+                fontSize: "14px",
+                color: "rgb(102, 102, 102)",
+                lineHeight: "1.6",
+                margin: "0"
               }}>
                 We'd love for you to share your Happiness Index journey on social media. 
                 Inspire others to take the first step towards emotional wellness!
@@ -268,21 +273,21 @@ export default function CertificateContent() {
               onClick={() => setShowSuccessPopup(false)}
               style={{
                 width: "100%",
-                padding: "0.875rem",
-                fontSize: "1rem",
+                padding: "14px",
+                fontSize: "16px",
                 fontWeight: "600",
-                backgroundColor: "#800020",
-                color: "#ffffff",
+                backgroundColor: "rgb(128, 0, 32)",
+                color: "rgb(255, 255, 255)",
                 border: "none",
                 borderRadius: "8px",
                 cursor: "pointer",
                 transition: "all 0.3s ease"
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "#660019";
+                e.currentTarget.style.backgroundColor = "rgb(102, 0, 25)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "#800020";
+                e.currentTarget.style.backgroundColor = "rgb(128, 0, 32)";
               }}
             >
               Got it!
@@ -290,41 +295,6 @@ export default function CertificateContent() {
           </div>
         </div>
       )}
-
-      <style jsx>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-          }
-          to {
-            opacity: 1;
-          }
-        }
-
-        @keyframes scaleIn {
-          from {
-            transform: scale(0.9);
-            opacity: 0;
-          }
-          to {
-            transform: scale(1);
-            opacity: 1;
-          }
-        }
-
-        @media (max-width: 768px) {
-          h1 {
-            font-size: 2rem !important;
-          }
-          p {
-            font-size: 1.5rem !important;
-          }
-          button {
-            font-size: 1rem !important;
-            padding: 0.875rem 1.5rem !important;
-          }
-        }
-      `}</style>
-    </div>
+    </>
   );
 }
