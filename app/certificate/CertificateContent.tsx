@@ -198,7 +198,7 @@ export default function CertificateContent() {
             e.currentTarget.style.boxShadow = "0 4px 12px rgba(128, 0, 32, 0.3)";
           }}
         >
-          <span style={{ fontSize: "clamp(16px, 4vw, 20px)" }}>💾</span>
+          <span style={{ fontSize: "clamp(16px, 4vw, 20px)" }}></span>
           {isDownloading ? "Preparing Download..." : !imageLoaded ? "Loading..." : "Download Certificate"}
         </button>
 
@@ -211,7 +211,7 @@ export default function CertificateContent() {
           margin: "16px 0 0 0",
           padding: "0 20px"
         }}>
-          Your certificate will be downloaded as a high-quality image
+        
         </p>
       </div>
 
