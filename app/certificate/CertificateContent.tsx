@@ -246,7 +246,7 @@ export default function CertificateContent() {
               marginBottom: "16px",
               margin: "0 0 16px 0"
             }}>
-              🎉 Certificate Downloaded!
+               Certificate Downloaded!
             </h2>
             
             <p style={{
@@ -272,7 +272,7 @@ export default function CertificateContent() {
                 marginBottom: "12px",
                 margin: "0 0 12px 0"
               }}>
-                📢 Share Your Achievement!
+                 Share Your Achievement!
               </p>
               <p style={{
                 fontSize: "clamp(11px, 2.5vw, 14px)",
