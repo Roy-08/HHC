@@ -254,7 +254,7 @@ export default function CertificateContent() {
               fontSize: "clamp(14px, 3vw, 18px)",
               fontWeight: "600",
               color: "#333333",
-              fontFamily: "Times New Roman"
+              fontFamily: "Times New Roman",
               marginBottom: "24px",
               margin: "0 0 24px 0"
             }}>
