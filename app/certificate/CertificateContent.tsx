@@ -139,7 +139,7 @@ export default function CertificateContent() {
           {/* Name Overlay - Positioned on the line */}
           <div style={{
             position: "absolute",
-            top: "37%",
+            top: "39%",
             left: "0",
             right: "0",
             transform: "translateY(-50%)",
