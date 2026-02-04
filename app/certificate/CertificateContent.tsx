@@ -244,6 +244,7 @@ export default function CertificateContent() {
               fontWeight: "bold",
               color: "#800020",
               marginBottom: "16px",
+              fontFamily: "Timew New Roman, sans-serif"
               margin: "0 0 16px 0"
             }}>
                Certificate Downloaded!
@@ -253,6 +254,7 @@ export default function CertificateContent() {
               fontSize: "clamp(14px, 3vw, 18px)",
               fontWeight: "600",
               color: "#333333",
+              fontFamily: "Times new roman, sans-serif"
               marginBottom: "24px",
               margin: "0 0 24px 0"
             }}>
@@ -271,6 +273,7 @@ export default function CertificateContent() {
                 color: "#800020",
                 marginBottom: "12px",
                 margin: "0 0 12px 0"
+                fontFamily: "Footlight MT Light, sans-serif"
               }}>
                  Share Your Achievement!
               </p>
@@ -279,6 +282,7 @@ export default function CertificateContent() {
                 color: "#666666",
                 lineHeight: "1.6",
                 margin: "0"
+                 fontFamily: "Times new roman, sans-serif"
               }}>
                 We&apos;d love for you to share your Happiness Index journey on social media. 
                 Inspire others to take the first step towards emotional wellness!
