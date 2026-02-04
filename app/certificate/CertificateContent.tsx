@@ -150,7 +150,7 @@ export default function CertificateContent() {
             padding: "0 10%"
           }}>
             <p style={{
-              fontFamily: "'Footlight MT Light', 'Lucida Handwriting', cursive",
+              fontFamily: "'Footlight MT Light',  cursive",
               fontWeight: "bold",
               fontSize: "clamp(20px, 4vw, 42px)",
               color: "#2B2828",
