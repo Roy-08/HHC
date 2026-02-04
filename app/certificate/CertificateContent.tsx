@@ -135,7 +135,7 @@ export default function CertificateContent() {
         >
           {/* Certificate Background Image */}
           <img
-            src="/images/Certificate.jpg"
+            src="/public/certificate.png"
             alt="Certificate of Participation"
             style={{
               width: "100%",
