@@ -486,7 +486,7 @@ export default function PortugueseQuizPage() {
         name: form.name,
         email: form.email,
         mobile: form.mobile,
-        dob: form.birthdate || null,
+        dob: form.birthdate,
         gender: form.gender,
         country: form.country,
         occupation: form.occupation || null,
@@ -702,7 +702,7 @@ export default function PortugueseQuizPage() {
 
                 <div className="group">
                   <label className="block text-xs md:text-sm font-bold text-gray-700 mb-1.5">
-                    Date of Birth <span className="text-gray-400 text-xs">(Optional)</span>
+                    Date of Birth <span className="text-gray-400 text-xs"></span>
                   </label>
                   <input
                     type="date"
@@ -713,7 +713,8 @@ export default function PortugueseQuizPage() {
                       validateBirthdate(e.target.value);
                     }}
                     className="w-full px-0 py-2 md:py-2.5 bg-transparent border-b-2 border-gray-300 focus:border-[#de0f3f] focus:outline-none transition-all duration-300 text-gray-800 text-sm md:text-base h-10 md:h-11"
-                  />
+                   required
+                    />
                   {dateError && (
                     <p className="mt-1.5 text-xs md:text-sm text-red-600 font-medium">{dateError}</p>
                   )}
@@ -970,4 +971,5 @@ export default function PortugueseQuizPage() {
       </footer>
     </div>
   );
+
 }
