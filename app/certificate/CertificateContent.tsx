@@ -44,17 +44,27 @@ export default function CertificateContent() {
       // Wait for everything to be fully rendered
       await new Promise(resolve => setTimeout(resolve, 2000));
 
-      const canvas = await html2canvas(certificateRef.current, {
-        scale: 4,
+      // Get the actual dimensions of the certificate container
+      const element = certificateRef.current;
+      const rect = element.getBoundingClientRect();
+
+      const canvas = await html2canvas(element, {
+        scale: 3,
         useCORS: true,
         allowTaint: true,
-        backgroundColor: null,
+        backgroundColor: "#ffffff",
         logging: false,
-        imageTimeout: 0,
+        imageTimeout: 15000,
         removeContainer: false,
         foreignObjectRendering: false,
-        width: certificateRef.current.offsetWidth,
-        height: certificateRef.current.offsetHeight,
+        width: rect.width,
+        height: rect.height,
+        windowWidth: rect.width,
+        windowHeight: rect.height,
+        x: 0,
+        y: 0,
+        scrollX: 0,
+        scrollY: 0,
       });
 
       const link = document.createElement("a");
@@ -70,6 +80,19 @@ export default function CertificateContent() {
     } finally {
       setIsDownloading(false);
     }
+  };
+
+  // Calculate responsive font size based on name length
+  const getNameFontSize = () => {
+    const nameLength = name.length;
+    if (nameLength > 20) {
+      return "clamp(14px, 2.5vw, 28px)";
+    } else if (nameLength > 15) {
+      return "clamp(16px, 3vw, 34px)";
+    } else if (nameLength > 10) {
+      return "clamp(18px, 3.5vw, 38px)";
+    }
+    return "clamp(20px, 4vw, 42px)";
   };
 
   return (
@@ -115,16 +138,17 @@ export default function CertificateContent() {
             position: "relative",
             width: "100%",
             maxWidth: "900px",
-            marginBottom: "20px",
+            marginBottom: "18px",
             boxShadow: "0 4px 12px rgba(128, 0, 32, 0.2)",
-            borderRadius: "8px",
+            borderRadius: "4px",
             overflow: "hidden",
-            backgroundColor: "#ffffff"
+            backgroundColor: "#ffffff",
+            aspectRatio: "auto"
           }}
         >
           {/* Certificate Background Image */}
           <img
-            src="/certificate.png"
+            src="/images/Certificate.jpg"
             alt="Certificate of Participation"
             onLoad={() => setImageLoaded(true)}
             onError={() => setImageLoaded(true)}
@@ -137,33 +161,37 @@ export default function CertificateContent() {
           />
 
           {/* Name Overlay - Positioned on the line */}
-          <div style={{
-            position: "absolute",
-            top: "39%",
-            left: "0",
-            right: "0",
-            transform: "translateY(-50%)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            pointerEvents: "none",
-            padding: "0 10%"
-          }}>
-            <p style={{
-              fontFamily: "'Footlight MT Light',  cursive",
-              fontWeight: "bold",
-              fontSize: "clamp(20px, 4vw, 42px)",
-              color: "#2B2828",
-              textShadow: "1px 1px 2px rgba(0, 0, 0, 0.1)",
-              letterSpacing: "0.02em",
-              margin: "0",
-              padding: "0",
-              textAlign: "center",
-              width: "100%",
-              lineHeight: "1.2"
-            }}>
+          <div 
+            style={{
+              position: "absolute",
+              top: "39%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              pointerEvents: "none",
+              width: "80%",
+              maxWidth: "600px",
+              textAlign: "center"
+            }}
+          >
+            <span 
+              style={{
+                fontFamily: "'Footlight MT Light', 'Lucida Handwriting', 'Times New Roman', cursive",
+                fontWeight: "bold",
+                fontSize: getNameFontSize(),
+                color: "#2B2828",
+                textShadow: "1px 1px 2px rgba(0, 0, 0, 0.1)",
+                letterSpacing: "0.02em",
+                lineHeight: "1.2",
+                display: "inline-block",
+                whiteSpace: "nowrap",
+                overflow: "visible"
+              }}
+            >
               {name || "Your Name"}
-            </p>
+            </span>
           </div>
         </div>
 
@@ -244,7 +272,7 @@ export default function CertificateContent() {
               fontWeight: "bold",
               color: "#800020",
               marginBottom: "16px",
-              fontFamily: "Timew New Roman, sans-serif",
+              fontFamily: "Times New Roman, sans-serif",
               margin: "0 0 16px 0"
             }}>
                Certificate Downloaded!
@@ -283,12 +311,11 @@ export default function CertificateContent() {
                 lineHeight: "1.6",
                 fontWeight: "bold",
                 margin: "0",
-                fontFamily: "Times New Roman"              }}>
+                fontFamily: "Times New Roman" }}>
                 We&apos;d love for you to share your Happiness Index journey on social media. 
                 Inspire others to take the first step towards emotional wellness!
               </p>
             </div>
-
             <button
               onClick={() => setShowSuccessPopup(false)}
               style={{
