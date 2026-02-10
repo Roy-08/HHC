@@ -315,8 +315,7 @@ export default function QuizPage() {
       .then((res) => res.json())
       .then((data) => {
         const sorted = data
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          .map((c: any) => ({
+          .map((c: { cca2: string; name: { common: string }; flags?: { png?: string } }) => ({
             code: c.cca2,
             name: c.name.common,
             flag: c.flags?.png || '',
@@ -341,10 +340,7 @@ export default function QuizPage() {
   }, []);
 
   const scrollToTop = () => {
-    if ('scrollTo' in globalThis) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (globalThis as any).scrollTo({ top: 0, behavior: 'smooth' });
-    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleAnswer = (qid: string, index: number) => {
@@ -383,7 +379,7 @@ export default function QuizPage() {
   const validateBirthdate = (date: string): boolean => {
     if (!date) {
       setDateError('');
-      return true; // Optional field
+      return true;
     }
 
     const selectedDate = new Date(date);
@@ -453,57 +449,30 @@ export default function QuizPage() {
       return;
     }
 
+    // Store form data for certificate
+    localStorage.setItem('userName', form.name);
+    localStorage.setItem('userEmail', form.email);
+
     // Show thank you page immediately
     setShowForm(false);
     setShowThankYou(true);
     scrollToTop();
 
-    // Submit to API in the background
+    // Calculate score
     const totalScore = calculateTotalScore();
     
-    fetch('/api/submit-quiz', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        name: form.name,
-        email: form.email,
-        mobile: form.mobile,
-        dob: form.birthdate || null,
-        gender: form.gender,
-        country: form.country,
-        occupation: form.occupation || null,
-        totalScore: totalScore,
-        answers: answers,
-      }),
-    })
-    .then(res => res.json())
-    .then(data => {
-      console.log('Quiz submitted successfully:', data);
-    })
-    .catch(error => {
-      console.error('Background submission error:', error);
+    // Log submission (in real app, this would be an API call)
+    console.log('Quiz submitted:', {
+      name: form.name,
+      email: form.email,
+      mobile: form.mobile,
+      dob: form.birthdate || null,
+      gender: form.gender,
+      country: form.country,
+      occupation: form.occupation || null,
+      totalScore: totalScore,
+      answers: answers,
     });
-  };
-
-  const handleBackToHome = () => {
-    setAnswers({});
-    setCurrentPage(1);
-    setShowForm(false);
-    setShowThankYou(false);
-    setForm({
-      name: '',
-      email: '',
-      mobile: '',
-      birthdate: '',
-      gender: '',
-      country: '',
-      occupation: '',
-    });
-    setSelectedCountry(null);
-    
-    router.push('/');
   };
 
   const progress = (currentPage / totalPages) * 100;
@@ -530,12 +499,9 @@ export default function QuizPage() {
                     <div className="absolute inset-2 bg-gradient-to-br from-white/20 to-transparent rounded-full"></div>
                     
                     <div className="relative z-10">
-                      <img 
-                        src="https://cdn-icons-png.flaticon.com/512/945/945467.png"
-                        alt="Email Icon"
-                        className="w-12 h-12 md:w-16 md:h-16 drop-shadow-lg"
-                        style={{ filter: 'brightness(0) invert(1)' }}
-                      />
+                      <svg className="w-12 h-12 md:w-16 md:h-16 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                      </svg>
                     </div>
                     
                     <div className="absolute -top-1 -right-1 md:-top-2 md:-right-2 w-4 h-4 md:w-6 md:h-6 text-yellow-300">
@@ -561,7 +527,7 @@ export default function QuizPage() {
                   Your Happiness Report is on its way! 🎉
                 </p>
                 <p className="text-base md:text-lg text-gray-600 px-2">
-                  We&apos;ve sent your personalized insights to
+                  We've sent your personalized insights to
                 </p>
               </div>
 
@@ -581,7 +547,7 @@ export default function QuizPage() {
                   📧 Check your email for your detailed report and certificate
                 </p>
                 <p className="text-xs md:text-sm text-gray-500 italic px-2">
-                  (Don&apos;t forget to check your spam folder)
+                  (Don't forget to check your spam folder)
                 </p>
               </div>
 
@@ -592,15 +558,23 @@ export default function QuizPage() {
               </div>
 
               <button
-                onClick={handleBackToHome}
+                onClick={() => {
+                  const name = encodeURIComponent(form.name);
+                  const date = encodeURIComponent(new Date().toLocaleDateString('en-US', { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                  }));
+                  router.push(`/certificate?name=${name}&date=${date}`);
+                }}
                 className="group relative inline-flex items-center gap-2 md:gap-3 px-8 md:px-10 py-4 md:py-5 bg-gradient-to-r from-[#de0f3f] via-[#ff4466] to-[#ff6b6b] text-white font-bold text-base md:text-lg rounded-full shadow-2xl hover:shadow-[#de0f3f]/50 transform hover:-translate-y-1 hover:scale-105 transition-all duration-300 overflow-hidden"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000"></div>
                 
-                <svg className="w-5 h-5 md:w-6 md:h-6 relative z-10 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                <svg className="w-5 h-5 md:w-6 md:h-6 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
-                <span className="relative z-10">Back to Home</span>
+                <span className="relative z-10">Download Certificate</span>
               </button>
             </div>
           </div>
@@ -883,7 +857,7 @@ export default function QuizPage() {
           />
         </div>
       </div>
-
+ 
       <main className="flex-1 px-6 pb-6">
         <div className="max-w-6xl mx-auto flex flex-col lg:flex-row gap-5">
           {currentQuestions.map(q => (
