@@ -148,7 +148,7 @@ export default function CertificateContent() {
         >
           {/* Certificate Background Image */}
           <img
-            src="/images/Certificate.jpg"
+            src="/certificate.png"
             alt="Certificate of Participation"
             onLoad={() => setImageLoaded(true)}
             onError={() => setImageLoaded(true)}
