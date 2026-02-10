@@ -226,8 +226,8 @@ function generateHTMLEmail(
   const happinessCategory = getHappinessCategory(score);
 
   return `
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+  <!DOCTYPE html>
+<html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -461,7 +461,6 @@ function generateHTMLEmail(
               <strong class="text-green" style="color:#1b6b36; font-size:16px;">${score}</strong>,
               placing you in the
               <strong class="text-green" style="color:#1b6b36;">${happinessCategory}</strong> category.
-              <a href="${pdfUrl}" target="_blank" class="link-green" style="color:#1b6b36; text-decoration:underline; font-weight:600;">Click here to view your report</a>.
             </p>
 
             <p class="mobile-font-small text-dark" style="font-size:14px; color:#3d5a46; margin:0 0 12px 0; line-height:1.6;">
@@ -476,14 +475,14 @@ function generateHTMLEmail(
               If you found this meaningful, we encourage you to share the Happiness Index with people you care about - a small step that can make a real difference.
             </p>
 
-            <!-- Single Centered Download Certificate Button - NOW GREEN -->
+            <!-- View Report Button -->
             <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation" style="margin:12px 0 25px 0;">
               <tr>
                 <td align="center">
                   <!--[if mso]>
-                  <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${certificateUrl}" style="height:44px;v-text-anchor:middle;width:220px;" arcsize="50%" strokecolor="#1b6b36" fillcolor="#1b6b36">
+                  <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${pdfUrl}" style="height:44px;v-text-anchor:middle;width:180px;" arcsize="50%" strokecolor="#1b6b36" fillcolor="#1b6b36">
                     <w:anchorlock/>
-                    <center style="color:#ffffff;font-family:Arial,sans-serif;font-size:14px;font-weight:bold;">Download Certificate</center>
+                    <center style="color:#ffffff;font-family:Arial,sans-serif;font-size:14px;font-weight:bold;">View Report</center>
                   </v:roundrect>
                   <![endif]-->
                   <!--[if !mso]><!-->
@@ -494,7 +493,7 @@ function generateHTMLEmail(
                         background-color:#1b6b36;
                         mso-padding-alt:0;
                       " bgcolor="#1b6b36">
-                        <a href="${certificateUrl}" target="_blank" class="button-a mobile-button" style="
+                        <a href="${pdfUrl}" target="_blank" class="button-a mobile-button" style="
                           display:inline-block;
                           padding:14px 28px;
                           font-family:Arial, Helvetica, sans-serif;
@@ -509,7 +508,7 @@ function generateHTMLEmail(
                           border:2px solid #1b6b36;
                           mso-padding-alt:0;
                         ">
-                          Download Certificate
+                          View Report
                         </a>
                       </td>
                     </tr>
@@ -613,8 +612,5 @@ function generateHTMLEmail(
   </tr>
 </table>
 </body>
-</html>
-
-`;
-
-}
+</html>;
+`}
