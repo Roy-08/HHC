@@ -166,6 +166,9 @@ async function saveToGoogleSheets(data: {
   language: string;
 }) {
   try {
+    const timestamp = new Date().toLocaleString("en-IN", {
+  timeZone: "Asia/Kolkata",
+});
     const auth = new google.auth.GoogleAuth({
       credentials: {
         client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
@@ -177,7 +180,7 @@ async function saveToGoogleSheets(data: {
     const sheets = google.sheets({ version: "v4", auth });
 
     const spreadsheetId = process.env.GOOGLE_SHEET_ID;
-    const range = "Test_Data!A:K";
+    const range = "Test_Data!A:L";
 
     await sheets.spreadsheets.values.append({
       spreadsheetId,
@@ -186,6 +189,7 @@ async function saveToGoogleSheets(data: {
       requestBody: {
         values: [
           [
+            timestamp,
             data.name,
             data.email,
             data.mobile,
