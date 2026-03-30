@@ -2,7 +2,8 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { ChevronDown, Globe, Sparkles } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
 
 interface Language {
   code: string;
@@ -27,11 +28,15 @@ const languages: Language[] = [
   { code: 'la', name: 'Latin' },
 ];
 
-export default function Page() {
+function HomeContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [selectedLanguage, setSelectedLanguage] = useState<Language>(languages[0]);
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Capture the volunteer ref parameter
+  const volunteerRef = searchParams.get('ref') || '';
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -69,7 +74,9 @@ export default function Page() {
     };
 
     const route = routes[selectedLanguage.code] || '/quiz';
-    router.push(route);
+    // Pass the volunteer ref parameter to the quiz route
+    const refParam = volunteerRef ? `?ref=${encodeURIComponent(volunteerRef)}` : '';
+    router.push(`${route}${refParam}`);
   };
 
   return (
@@ -282,5 +289,17 @@ export default function Page() {
         }
       `}</style>
     </div>
+  );
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-50 via-white to-red-50">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-500"></div>
+      </div>
+    }>
+      <HomeContent />
+    </Suspense>
   );
 }
