@@ -3,7 +3,7 @@ import { google } from "googleapis";
 
 export async function POST(req: Request) {
   try {
-    const { name, email, mobile, dob, gender, country, occupation, totalScore, answers, language } = await req.json();
+    const { name, email, mobile, dob, gender, country, occupation, totalScore, answers, language, volunteer } = await req.json();
 
     if (!email || !name) {
       return NextResponse.json({ error: "Name and email are required" }, { status: 400 });
@@ -21,7 +21,7 @@ export async function POST(req: Request) {
       mailStatus = "Failed";
     }
 
-    // Save to Google Sheets
+    // Save to Google Sheets (main Test_Data tab)
     try {
       await saveToGoogleSheets({
         name,
@@ -34,10 +34,33 @@ export async function POST(req: Request) {
         totalScore,
         category,
         mailStatus,
-        language: language || 'english'
+        language: language || 'english',
+        volunteer: volunteer || '',
       });
     } catch (sheetError) {
       console.error("Google Sheets save failed:", sheetError);
+    }
+
+    // If volunteer reference exists, also save to the volunteer's tab
+    if (volunteer && typeof volunteer === 'string' && volunteer.trim().length > 0) {
+      try {
+        await saveToVolunteerSheet({
+          name,
+          email,
+          mobile,
+          dob,
+          gender,
+          country,
+          occupation,
+          totalScore,
+          category,
+          mailStatus,
+          language: language || 'english',
+          volunteer: volunteer.trim(),
+        });
+      } catch (volunteerSheetError) {
+        console.error("Volunteer sheet save failed:", volunteerSheetError);
+      }
     }
 
     return NextResponse.json({
@@ -164,11 +187,12 @@ async function saveToGoogleSheets(data: {
   category: string;
   mailStatus: string;
   language: string;
+  volunteer: string;
 }) {
   try {
     const timestamp = new Date().toLocaleString("en-IN", {
-  timeZone: "Asia/Kolkata",
-});
+      timeZone: "Asia/Kolkata",
+    });
     const auth = new google.auth.GoogleAuth({
       credentials: {
         client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
@@ -180,7 +204,7 @@ async function saveToGoogleSheets(data: {
     const sheets = google.sheets({ version: "v4", auth });
 
     const spreadsheetId = process.env.GOOGLE_SHEET_ID;
-    const range = "Test_Data!A:L";
+    const range = "Test_Data!A:M";
 
     await sheets.spreadsheets.values.append({
       spreadsheetId,
@@ -201,13 +225,88 @@ async function saveToGoogleSheets(data: {
             data.category,
             data.mailStatus,
             data.language,
+            data.volunteer,
           ],
         ],
       },
     });
-    console.log("✅ Data saved to Google Sheets");
+    console.log("✅ Data saved to Google Sheets (Test_Data)");
   } catch (err) {
     console.error("❌ Google Sheets error:", err);
+    throw err;
+  }
+}
+
+async function saveToVolunteerSheet(data: {
+  name: string;
+  email: string;
+  mobile: string;
+  dob: string;
+  gender: string;
+  country: string;
+  occupation: string;
+  totalScore: number;
+  category: string;
+  mailStatus: string;
+  language: string;
+  volunteer: string;
+}) {
+  try {
+    const timestamp = new Date().toLocaleString("en-IN", {
+      timeZone: "Asia/Kolkata",
+    });
+    const auth = new google.auth.GoogleAuth({
+      credentials: {
+        client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+        private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
+      },
+      scopes: ["https://www.googleapis.com/auth/spreadsheets"],
+    });
+
+    const sheets = google.sheets({ version: "v4", auth });
+    const spreadsheetId = process.env.GOOGLE_SHEET_ID;
+
+    // First verify the volunteer tab exists
+    const spreadsheet = await sheets.spreadsheets.get({ spreadsheetId });
+    const existingSheets = spreadsheet.data.sheets || [];
+    const tabExists = existingSheets.some(
+      (s) => s.properties?.title === data.volunteer
+    );
+
+    if (!tabExists) {
+      console.warn(`⚠️ Volunteer tab "${data.volunteer}" not found, skipping volunteer sheet save`);
+      return;
+    }
+
+    const range = `${data.volunteer}!A:M`;
+
+    await sheets.spreadsheets.values.append({
+      spreadsheetId,
+      range,
+      valueInputOption: "USER_ENTERED",
+      requestBody: {
+        values: [
+          [
+            timestamp,
+            data.name,
+            data.email,
+            data.mobile,
+            data.dob,
+            data.gender,
+            data.country,
+            data.occupation,
+            data.totalScore,
+            data.category,
+            data.mailStatus,
+            data.language,
+            data.volunteer,
+          ],
+        ],
+      },
+    });
+    console.log(`✅ Data saved to volunteer tab: ${data.volunteer}`);
+  } catch (err) {
+    console.error(`❌ Volunteer sheet error for "${data.volunteer}":`, err);
     throw err;
   }
 }
