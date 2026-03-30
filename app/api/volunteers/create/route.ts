@@ -1,8 +1,3 @@
-// ============================================================
-// FILE: app/api/volunteers/create/route.ts
-// COPY THIS FILE to your Next.js project at the path above
-// ============================================================
-
 import { NextResponse } from "next/server";
 import { google } from "googleapis";
 
