@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect, useRef } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect, useRef, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 type AnswerMap = Record<string, number>;
 
@@ -270,13 +270,17 @@ const questions = [
   },
 ];
 
-export default function QuizPage() {
+function QuizContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [currentPage, setCurrentPage] = useState(1);
   const [answers, setAnswers] = useState<AnswerMap>({});
   const [showAlert, setShowAlert] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [showThankYou, setShowThankYou] = useState(false);
+
+  // Capture volunteer ref from URL
+  const volunteerRef = searchParams.get('ref') || '';
 
   // Form states
   const [countries, setCountries] = useState<Country[]>([]);
@@ -476,6 +480,7 @@ export default function QuizPage() {
         occupation: form.occupation || null,
         totalScore: totalScore,
         answers: answers,
+        volunteer: volunteerRef || '',
       }),
     })
     .then(res => res.json())
@@ -942,5 +947,16 @@ export default function QuizPage() {
       </footer>
     </div>
   );
+}
 
+export default function QuizPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#de0f3f]"></div>
+      </div>
+    }>
+      <QuizContent />
+    </Suspense>
+  );
 }
