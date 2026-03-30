@@ -1,3 +1,8 @@
+// ============================================================
+// FILE: app/api/volunteers/list/route.ts
+// COPY THIS FILE to your Next.js project at the path above
+// ============================================================
+
 import { NextResponse } from "next/server";
 import { google } from "googleapis";
 
@@ -18,8 +23,9 @@ export async function GET() {
     const spreadsheet = await sheets.spreadsheets.get({ spreadsheetId });
     const allSheets = spreadsheet.data.sheets || [];
 
-    // Filter out the main "Test_Data" tab and any other system tabs
-    const excludedTabs = ["test_data", "sheet1"];
+    // Filter out the main tabs and system tabs
+    // "data" is excluded because it is the main data tab, NOT a volunteer
+    const excludedTabs = ["test_data", "sheet1", "data"];
     const volunteerSheets = allSheets.filter(
       (s) =>
         !excludedTabs.includes(
