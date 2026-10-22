@@ -3,35 +3,36 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://YOUR-DEPLOYED-DOMAIN.vercel.app'),
+  metadataBase: new URL('https://happiness-index.vercel.app'),
 
   title: 'Happiness Index',
-  description:
-    'Happiness Index Quiz - Discover your happiness score',
+  description: 'Happiness Index Quiz - Discover your happiness score',
 
   icons: {
-    icon: '/hi.png',
+    icon: '/logo.png',
   },
 
   openGraph: {
     title: 'Happiness Index',
-    description:
-      'Happiness Index Quiz - Discover your happiness score',
+    description: 'Happiness Index Quiz - Discover your happiness score',
+    url: 'https://happiness-index.vercel.app/',
+    siteName: 'Happiness Index',
     type: 'website',
     images: [
       {
-        url: '/hi.png',
+        url: 'https://happiness-index.vercel.app/hi.png',
+        width: 1200,
+        height: 630,
         alt: 'Happiness Index Quiz',
       },
     ],
   },
 
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
     title: 'Happiness Index',
-    description:
-      'Happiness Index Quiz - Discover your happiness score',
-    images: ['/hi.png'],
+    description: 'Happiness Index Quiz - Discover your happiness score',
+    images: ['https://happiness-index.vercel.app/hi.png'],
   },
 };
 
