@@ -1,55 +1,71 @@
 
-import type { Metadata } from 'next';
-import './globals.css';
+import type { Metadata } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
+import "./globals.css";
+
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
+const title = "Happiness Index";
+
+const description =
+  "Happiness Index Quiz - Discover your happiness score.";
+
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL?.trim() ||
+  "https://happiness-index.vercel.app";
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://happiness-index.vercel.app'),
+  metadataBase: new URL(siteUrl),
 
-  title: 'Happiness Index',
-  description: 'Happiness Index Quiz - Discover your happiness score',
+  title,
+  description,
+  applicationName: "Happiness Index",
 
   icons: {
-    icon: '/logo.png',
+    icon: "/hi.png",
+    shortcut: "/hi.png",
   },
 
   openGraph: {
-    title: 'Happiness Index',
-    description: 'Happiness Index Quiz - Discover your happiness score',
-    url: 'https://happiness-index.vercel.app/',
-    siteName: 'Happiness Index',
-    type: 'website',
+    type: "website",
+    siteName: "Happiness Index",
+    locale: "en_US",
+    url: "/",
+    title,
+    description,
     images: [
       {
-        url: 'https://happiness-index.vercel.app/hi.png',
-        width: 1200,
-        height: 630,
-        alt: 'Happiness Index Quiz',
+        url: "/hi.png",
+        alt: "Happiness Index",
       },
     ],
   },
 
   twitter: {
-    card: 'summary_large_image',
-    title: 'Happiness Index',
-    description: 'Happiness Index Quiz - Discover your happiness score',
-    images: ['https://happiness-index.vercel.app/hi.png'],
+    card: "summary",
+    title,
+    description,
+    images: ["/hi.png"],
   },
 };
 
 export default function RootLayout({
   children,
-}: {
-  children: React.ReactNode;
-}) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
-      <head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
-      </head>
-      <body className="antialiased">{children}</body>
+    <html
+      lang="en"
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+    >
+      <body className="min-h-full">{children}</body>
     </html>
   );
 }
