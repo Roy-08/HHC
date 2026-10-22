@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     'Happiness Index Quiz - Discover your happiness score',
 
   icons: {
-    icon: '/logo.png',
+    icon: '/hi.png',
   },
 
   openGraph: {
